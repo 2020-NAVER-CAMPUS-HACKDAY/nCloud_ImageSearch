@@ -1,6 +1,3 @@
-# Issue 확인해주세요!
-
-
 # nCloud_ImageSearch
 
 ### 프로젝트 주제 설명

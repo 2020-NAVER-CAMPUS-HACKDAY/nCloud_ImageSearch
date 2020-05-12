@@ -12,7 +12,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override val vm: MainViewModel by viewModel()
     override fun getLayoutRes() = R.layout.activity_main
 
-    private lateinit var mainViewPagerAdapter : MainViewPagerAdapter
+    private lateinit var viewPagerAdapter: MainViewPagerAdapter
 
     override fun setupBinding() {
         binding.vm = vm
@@ -24,9 +24,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         setViewPager()
     }
 
-    private fun setViewPager(){
-        mainViewPagerAdapter = MainViewPagerAdapter(supportFragmentManager)
-        layout_viewPager.adapter = mainViewPagerAdapter
+    private fun setViewPager() {
+        viewPagerAdapter = MainViewPagerAdapter(supportFragmentManager)
+        layout_viewPager.adapter = viewPagerAdapter
 
         layout_tab_layout.apply {
             setupWithViewPager(layout_viewPager)

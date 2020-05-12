@@ -8,7 +8,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
     override val vm: AlbumViewModel by viewModel()
-    override fun getLayoutRes() = R.layout.fragment_photo
+    override fun getLayoutRes() = R.layout.fragment_album
     override fun setupBinding() {
         binding.vm = vm
     }

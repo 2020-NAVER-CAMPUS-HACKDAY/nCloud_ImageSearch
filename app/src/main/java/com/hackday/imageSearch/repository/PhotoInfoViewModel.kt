@@ -5,7 +5,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 
 class PhotoInfoViewModel (
-    photoRepository: PhotoRepositoryImpl
+    photoInfoRepository: PhotoInfoRepositoryImpl
 ) : ViewModel() {
 
     private val disposable: CompositeDisposable = CompositeDisposable()

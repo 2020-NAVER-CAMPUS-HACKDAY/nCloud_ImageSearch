@@ -4,13 +4,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "photo")
-data class Photo(
+@Entity(tableName = "photoinfo")
+data class PhotoInfo(
     @PrimaryKey
     @ColumnInfo(name = "id")
-    var id : String,
+    var id : String, //photo name?
     @ColumnInfo(name = "date")
-    var date : String,
+    var date : String, // yy-mm-dd? hh-mm-ss
     @ColumnInfo(name = "gps") //장소를 위한 위치 저장 값
     var gps : String,
     @ColumnInfo(name = "tag1") //ML kit 실행 후 정확도가 높은 태그 순위 3개까지 사용

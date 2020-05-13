@@ -1,12 +1,12 @@
-package com.hackday.imageSearch.ui.main
+package com.hackday.imageSearch.ui.photo
 
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseFragment
 import com.hackday.imageSearch.databinding.FragmentPhotoBinding
-import com.hackday.imageSearch.ui.main.adapterPhoto.PhotoItemDecorator
-import com.hackday.imageSearch.ui.main.adapterPhoto.PhotoRecyclerAdapter
+import com.hackday.imageSearch.ui.photo.adapter.PhotoItemDecorator
+import com.hackday.imageSearch.ui.photo.adapter.PhotoRecyclerAdapter
 import kotlinx.android.synthetic.main.fragment_album.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

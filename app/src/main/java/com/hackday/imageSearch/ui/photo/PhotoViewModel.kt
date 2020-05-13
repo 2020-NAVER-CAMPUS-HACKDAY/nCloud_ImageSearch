@@ -1,11 +1,11 @@
-package com.hackday.imageSearch.ui.main
+package com.hackday.imageSearch.ui.photo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hackday.imageSearch.R
 
-class AlbumViewModel : ViewModel() {
+class PhotoViewModel : ViewModel() {
 
     // sample data
     var sample = arrayListOf(
@@ -15,8 +15,9 @@ class AlbumViewModel : ViewModel() {
         R.drawable.ic_launcher_background,
         R.drawable.ic_launcher_background,
         R.drawable.ic_launcher_background
-    )
+        )
 
     private val _itemList = MutableLiveData<ArrayList<Int>>(sample)
     val itemList: LiveData<ArrayList<Int>> get() = _itemList
+
 }

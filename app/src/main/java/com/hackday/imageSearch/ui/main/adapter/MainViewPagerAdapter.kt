@@ -3,8 +3,8 @@ package com.hackday.imageSearch.ui.main.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.hackday.imageSearch.ui.main.AlbumFragment
-import com.hackday.imageSearch.ui.main.PhotoFragment
+import com.hackday.imageSearch.ui.album.AlbumFragment
+import com.hackday.imageSearch.ui.photo.PhotoFragment
 
 class MainViewPagerAdapter(fm: FragmentManager) :
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

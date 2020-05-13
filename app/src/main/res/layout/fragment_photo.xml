@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.hackday.imageSearch.ui.main.PhotoViewModel" />
+            type="com.hackday.imageSearch.ui.photo.PhotoViewModel" />
 
     </data>
 

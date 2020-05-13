@@ -1,4 +1,4 @@
-package com.hackday.imageSearch.ui.main.adapterPhoto
+package com.hackday.imageSearch.ui.photo.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

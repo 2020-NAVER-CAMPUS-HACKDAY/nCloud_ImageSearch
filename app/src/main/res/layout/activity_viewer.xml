@@ -2,19 +2,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.main.MainActivity">
+    tools:context="com.hackday.imageSearch.ui.viewer.ViewerActivity">
 
     <data>
 
         <variable
             name="vm"
-            type="com.hackday.imageSearch.ui.main.MainViewModel" />
+            type="com.hackday.imageSearch.ui.viewer.ViewerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_top"
@@ -28,59 +28,35 @@
             android:layout_width="0.1dp"
             android:layout_height="0.1dp"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="20dp" />
+            app:layout_constraintGuide_begin="15dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_end"
             android:layout_width="0.1dp"
             android:layout_height="0.1dp"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="20dp" />
+            app:layout_constraintGuide_end="15dp" />
 
-
-        <Button
+        <ImageButton
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="뒤"
-            app:layout_constraintStart_toStartOf="@id/guide_start"
+            app:layout_constraintLeft_toRightOf="@id/guide_start"
             app:layout_constraintTop_toTopOf="@id/guide_top" />
 
-        <EditText
-            android:id="@+id/text1"
+        <ImageButton
+            android:id="@+id/btn_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:hint="검색"
-            app:layout_constraintBaseline_toBaselineOf="@id/button1"
-            app:layout_constraintEnd_toStartOf="@+id/button1"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toEndOf="@id/btn_back"
-            app:layout_constraintTop_toTopOf="@id/guide_top" />
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="..."
             app:layout_constraintEnd_toEndOf="@id/guide_end"
             app:layout_constraintTop_toTopOf="@id/guide_top" />
 
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/layout_viewPager"
+        <ImageView
+            android:id="@+id/img_photo_detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@id/btn_back" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/layout_tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_launcher_background" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </layout>

@@ -23,15 +23,15 @@ class MLActivity : AppCompatActivity(){
         val projection =
             arrayOf(MediaColumns.DATA, MediaColumns.DISPLAY_NAME)
 
-        val cursor:Cursor? =
+        val cursor =
             contentResolver.query(uri, projection, null, null, MediaColumns.DATE_ADDED + " desc")
 
-        val columnIndex: Int = cursor!!.getColumnIndexOrThrow(MediaColumns.DATA)
-        val columnDisplayname: Int = cursor!!.getColumnIndexOrThrow(MediaColumns.DISPLAY_NAME)
+        val columnIndex: Int = cursor?.getColumnIndexOrThrow(MediaColumns.DATA) ?: return result
+        val columnDisplayname: Int = cursor.getColumnIndexOrThrow(MediaColumns.DISPLAY_NAME)
         var lastIndex: Int
         while (cursor.moveToNext()) {
-            val absolutePathOfImage: String = cursor!!.getString(columnIndex)
-            val nameOfFile: String = cursor!!.getString(columnDisplayname)
+            val absolutePathOfImage: String = cursor.getString(columnIndex)
+            val nameOfFile: String = cursor.getString(columnDisplayname)
             lastIndex = absolutePathOfImage.lastIndexOf(nameOfFile)
             lastIndex = if (lastIndex >= 0) lastIndex else nameOfFile.length - 1
             if (!TextUtils.isEmpty(absolutePathOfImage)) {
@@ -41,6 +41,7 @@ class MLActivity : AppCompatActivity(){
         for (string in result) {
             Log.i("PhotoSelectActivity.java | getPathOfAllImages", "|$string|")
         }
+        cursor.close();
         return result
     }
 }

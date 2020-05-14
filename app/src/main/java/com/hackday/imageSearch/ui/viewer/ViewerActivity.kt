@@ -1,5 +1,6 @@
 package com.hackday.imageSearch.ui.viewer
 
+import android.net.Uri
 import android.os.Bundle
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseActivity
@@ -16,6 +17,10 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    fun updateInfo(id: String, uri: String){
+        // id와 uri 를 통해 db에서 사진의 디테일 정보 불러오기
     }
 
     companion object{

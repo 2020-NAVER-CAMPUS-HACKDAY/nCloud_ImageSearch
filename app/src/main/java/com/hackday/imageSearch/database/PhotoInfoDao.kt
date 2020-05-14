@@ -28,7 +28,7 @@ interface PhotoInfoDao {
     fun getPhotoById(id: String): Single<PhotoInfo>
 
     @Query("SELECT * FROM photoinfo WHERE uri= :uri")
-    fun getPhotoByUri(uri: Uri): Single<PhotoInfo>
+    fun getPhotoByUri(uri: String): Single<PhotoInfo>
 
     @Query("SELECT * FROM photoinfo WHERE tag1= :tag1")
     fun getPhotoByTag1(tag1: String): Single<PhotoInfo>

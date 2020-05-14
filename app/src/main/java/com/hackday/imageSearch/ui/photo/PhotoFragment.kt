@@ -1,16 +1,20 @@
 package com.hackday.imageSearch.ui.photo
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseFragment
 import com.hackday.imageSearch.databinding.FragmentPhotoBinding
+import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.ui.photo.adapter.PhotoItemDecorator
 import com.hackday.imageSearch.ui.photo.adapter.PhotoRecyclerAdapter
+import com.hackday.imageSearch.ui.viewer.ViewerActivity
 import kotlinx.android.synthetic.main.fragment_album.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PhotoFragment : BaseFragment<FragmentPhotoBinding>() {
+class PhotoFragment : BaseFragment<FragmentPhotoBinding>(),photoClickListener {
     override val vm: PhotoViewModel by viewModel()
     override fun getLayoutRes() = R.layout.fragment_photo
     override fun setupBinding() {
@@ -31,11 +35,20 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>() {
         val recyclerManager = GridLayoutManager(context!!, 4)
 
         with(layout_recycler_view) {
-            adapter = PhotoRecyclerAdapter()
+            adapter = PhotoRecyclerAdapter { photo ->
+                photoClicked(photo)
+            }
             layoutManager = recyclerManager
             setHasFixedSize(false)
             addItemDecoration(PhotoItemDecorator())
         }
+    }
+
+    override fun photoClicked(photo: PhotoInfo) {
+        var intent = Intent(context,ViewerActivity::class.java)
+        intent.putExtra(ViewerActivity.EXTRA_PHOTO_ID, photo.id)
+        intent.putExtra(ViewerActivity.EXTRA_PHOTO_URI, photo.uri)
+        startActivity(intent)
     }
 
 }

@@ -1,7 +1,5 @@
 package com.hackday.imageSearch.repository
 
-import android.net.Uri
-import androidx.lifecycle.LiveData
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.database.PhotoInfoDatabase
 import io.reactivex.Completable
@@ -10,19 +8,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class PhotoInfoRepositoryImpl : PhotoInfoRepository {
-    private val photoInfoDao = PhotoInfoDatabase.getDatabase()
+    private val photoInfoDao = PhotoInfoDatabase.getInstance()
         .photoInfoDao()
 
     companion object{
         @Volatile
-        private var instance: PhotoInfoRepositoryImpl? = null
+        private var INSTANCE: PhotoInfoRepositoryImpl? = null
 
         fun getInstance() =
-            instance
-                ?: synchronized(this){
-                instance
-                    ?: PhotoInfoRepositoryImpl()
-                        .also { instance = it }
+            INSTANCE ?: synchronized(this){
+                INSTANCE ?: PhotoInfoRepositoryImpl().also { INSTANCE = it }
             }
     }
 
@@ -51,7 +46,7 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getPhotoByUri(uri: Uri): Single<PhotoInfo> {
+    override fun getPhotoByUri(uri: String): Single<PhotoInfo> {
         return photoInfoDao
             .getPhotoByUri(uri)
             .subscribeOn(Schedulers.io())

@@ -14,6 +14,11 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:windowSoftInputMode="stateHidden">
+        </activity>
+
+        <activity
+            android:name=".ml.MLActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

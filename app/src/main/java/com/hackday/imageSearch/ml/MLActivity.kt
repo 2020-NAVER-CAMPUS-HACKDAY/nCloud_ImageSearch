@@ -27,13 +27,8 @@ class MLActivity : AppCompatActivity(){
             contentResolver.query(uri, projection, null, null, MediaColumns.DATE_ADDED + " desc")
 
         val columnIndex: Int = cursor?.getColumnIndexOrThrow(MediaColumns.DATA) ?: return result
-        val columnDisplayname: Int = cursor.getColumnIndexOrThrow(MediaColumns.DISPLAY_NAME)
-        var lastIndex: Int
         while (cursor.moveToNext()) {
             val absolutePathOfImage: String = cursor.getString(columnIndex)
-            val nameOfFile: String = cursor.getString(columnDisplayname)
-            lastIndex = absolutePathOfImage.lastIndexOf(nameOfFile)
-            lastIndex = if (lastIndex >= 0) lastIndex else nameOfFile.length - 1
             if (!TextUtils.isEmpty(absolutePathOfImage)) {
                 result.add(absolutePathOfImage)
             }

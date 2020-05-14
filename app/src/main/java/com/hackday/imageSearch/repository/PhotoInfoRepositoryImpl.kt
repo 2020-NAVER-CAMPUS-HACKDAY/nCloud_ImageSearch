@@ -51,7 +51,7 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getPhotoByUri(uri: Uri): Single<PhotoInfo> {
+    override fun getPhotoByUri(uri: String): Single<PhotoInfo> {
         return photoInfoDao
             .getPhotoByUri(uri)
             .subscribeOn(Schedulers.io())

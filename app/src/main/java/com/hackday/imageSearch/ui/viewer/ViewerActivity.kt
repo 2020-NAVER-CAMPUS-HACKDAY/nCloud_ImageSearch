@@ -17,5 +17,15 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
+    companion object{
+        const val EXTRA_PHOTO_ID = "EXTRA_PHOTO_ID"
+        const val EXTRA_PHOTO_DATE = "EXTRA_PHOTO_DATE"
+        const val EXTRA_PHOTO_GPS = "EXTRA_PHOTO_GPS"
+        const val EXTRA_PHOTO_URI = "EXTRA_PHOTO_URI"
+        const val EXTRA_PHOTO_TAG1 = "EXTRA_PHOTO_TAG1"
+        const val EXTRA_PHOTO_TAG2 = "EXTRA_PHOTO_TAG2"
+        const val EXTRA_PHOTO_TAG3 = "EXTRA_PHOTO_TAG3"
+    }
 }
 

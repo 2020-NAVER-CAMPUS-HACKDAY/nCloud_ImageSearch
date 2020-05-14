@@ -1,5 +1,6 @@
 package com.hackday.imageSearch.database
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.hackday.imageSearch.model.PhotoInfo
@@ -25,6 +26,9 @@ interface PhotoInfoDao {
 
     @Query("SELECT * FROM photoinfo WHERE id= :id")
     fun getPhotoById(id: String): Single<PhotoInfo>
+
+    @Query("SELECT * FROM photoinfo WHERE uri= :uri")
+    fun getPhotoByUri(uri: Uri): Single<PhotoInfo>
 
     @Query("SELECT * FROM photoinfo WHERE tag1= :tag1")
     fun getPhotoByTag1(tag1: String): Single<PhotoInfo>

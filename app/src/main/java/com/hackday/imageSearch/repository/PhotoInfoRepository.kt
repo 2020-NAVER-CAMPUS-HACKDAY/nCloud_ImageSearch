@@ -1,7 +1,5 @@
 package com.hackday.imageSearch.repository
 
-import android.net.Uri
-import androidx.lifecycle.LiveData
 import com.hackday.imageSearch.model.PhotoInfo
 import io.reactivex.Completable
 import io.reactivex.Single

@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -11,6 +12,7 @@ import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseActivity
 import com.hackday.imageSearch.databinding.ActivityViewerBinding
 import com.hackday.imageSearch.model.PhotoInfo
+import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
 import kotlinx.android.synthetic.main.activity_viewer.*
 import kotlinx.android.synthetic.main.dialog_viewer_infodetail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,6 +28,8 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
     override fun setupBinding() {
         binding.vm = vm
     }
+
+    val pvm = PhotoInfoViewModel(vm.repository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +65,9 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
 
     fun loadDetail(){
         // uri를 통해 photo 데이터 로드
-        vm.getPhotoByUri(uri)
+        pvm.getPhotoByUri(uri)
         // dialog에 출력
-        vm.photoOne.observe(this, Observer {
+        pvm.photoOne.observe(this, Observer {
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.dialog_viewer_infodetail, null)
             d_photo_date.text = it.date

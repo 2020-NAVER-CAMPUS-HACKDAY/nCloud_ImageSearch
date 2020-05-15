@@ -2,15 +2,17 @@ package com.hackday.imageSearch.ml
 
 import android.app.Application
 import android.provider.ContactsContract
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.view.View
+import androidx.lifecycle.*
 import com.hackday.imageSearch.model.PhotoInfo
 
-class MLViewModel(application: Application) : AndroidViewModel(application) {
+class MLViewModel:ViewModel() {
 
-    fun search(photoInfo:PhotoInfo)
+    private val _progress = MutableLiveData<Int>()
+    val progress:LiveData<Int> =_progress
+
+    fun setProgress(progress:Int)
     {
-
+        _progress.postValue(progress)
     }
 }

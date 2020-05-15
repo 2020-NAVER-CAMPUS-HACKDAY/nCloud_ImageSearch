@@ -3,6 +3,7 @@ package com.hackday.imageSearch.ui.viewer
 import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -59,15 +60,20 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
     }
 
     fun loadDetail(){
-        // uri를 통해 photo 데이터 로드, 뒤에 더 추가해야함
-        var res = vm.getPhotoByUri(uri)
-
+        // uri를 통해 photo 데이터 로드
+        vm.getPhotoByUri(uri)
         // dialog에 출력
-        val builder = AlertDialog.Builder(this)
-        val dialogView = layoutInflater.inflate(R.layout.dialog_viewer_infodetail, null)
-        //d_photo_date.text = ""
+        vm.photoOne.observe(this, Observer {
+            val builder = AlertDialog.Builder(this)
+            val dialogView = layoutInflater.inflate(R.layout.dialog_viewer_infodetail, null)
+            d_photo_date.text = it.date
+            d_photo_gps.text = it.gps.toString()
+            d_photo_tag1.text = it.tag1
+            d_photo_tag2.text = it.tag2
+            d_photo_tag3.text = it.tag3
 
-        builder.setView(dialogView).create().show()
+            builder.setView(dialogView).create().show()
+        })
 
     }
 

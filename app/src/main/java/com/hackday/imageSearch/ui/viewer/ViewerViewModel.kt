@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryImpl
+import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import com.hackday.imageSearch.ui.photo.PhotoViewModel
 import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -14,16 +15,9 @@ import io.reactivex.observers.DisposableSingleObserver
 
 class ViewerViewModel : ViewModel() {
 
-    var repository: PhotoInfoRepositoryImpl = PhotoInfoRepositoryImpl()
-
-//    private var pvm = PhotoInfoViewModel(repository)
-//
-//    fun getPhotoByUri(uri: String){
-//        pvm.getPhotoByUri(uri)
-//    }
-//
-//    fun getPhotoById(id: String){
-//
-//    }
-
+    var vdate : String = ""
+    var vgps : String = ""
+    var vtag1 : String = ""
+    var vtag2 : String = ""
+    var vtag3 : String = ""
 }

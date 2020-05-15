@@ -12,7 +12,7 @@ class PhotoInfoViewModel (
     private val photoInfoRepository: PhotoInfoRepositoryImpl
 ) : ViewModel() {
 
-    private val disposable: CompositeDisposable = CompositeDisposable()
+    val disposable: CompositeDisposable = CompositeDisposable()
 
     var photoOne : MutableLiveData<PhotoInfo> = MutableLiveData()
 

@@ -1,16 +1,20 @@
 package com.hackday.imageSearch.ui.photoinfo
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryImpl
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
 
 
 class PhotoInfoViewModel (
     private val photoInfoRepository: PhotoInfoRepositoryImpl
 ) : ViewModel() {
 
-    private val disposable: CompositeDisposable = CompositeDisposable()
+    val disposable: CompositeDisposable = CompositeDisposable()
+
+    var photoOne : MutableLiveData<PhotoInfo> = MutableLiveData()
 
     fun getAll(){
         disposable.add(
@@ -36,14 +40,30 @@ class PhotoInfoViewModel (
     fun getPhotoById(id: String){
         disposable.add(
             photoInfoRepository.getPhotoById(id)
-                .subscribe()
+                .subscribeWith(object : DisposableSingleObserver<PhotoInfo>(){
+                    override fun onSuccess(t: PhotoInfo) {
+                        photoOne.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+                })
         )
     }
 
     fun getPhotoByUri(uri: String){
         disposable.add(
             photoInfoRepository.getPhotoByUri(uri)
-                .subscribe()
+                .subscribeWith(object : DisposableSingleObserver<PhotoInfo>(){
+                    override fun onSuccess(t: PhotoInfo) {
+                        photoOne.value = t
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+                })
         )
     }
 

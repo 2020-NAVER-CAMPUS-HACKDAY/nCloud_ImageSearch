@@ -13,10 +13,24 @@ abstract class PhotoInfoDatabase : RoomDatabase() {
     companion object{
         private const val DB_NAME = "photoinfo.db"
 
-        @JvmStatic
-        fun getDatabase(): PhotoInfoDatabase{
-            return Room.databaseBuilder(MyApplication.applicationContext(), PhotoInfoDatabase::class.java, DB_NAME)
-                .build()
+        private var INSTANCE: PhotoInfoDatabase? = null
+
+        fun getInstance(): PhotoInfoDatabase{
+            if(INSTANCE == null){
+                synchronized(PhotoInfoDatabase::class) {
+                    INSTANCE = Room.databaseBuilder(
+                        MyApplication.applicationContext(),
+                        PhotoInfoDatabase::class.java,
+                        DB_NAME
+                    )
+                        .build()
+                }
+            }
+            return INSTANCE as PhotoInfoDatabase
+        }
+
+        fun destroyInstance(){
+            INSTANCE = null
         }
     }
 }

@@ -3,20 +3,15 @@ package com.hackday.imageSearch.ui.album
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hackday.imageSearch.R
 
 class AlbumViewModel : ViewModel() {
 
-    // sample data
-    var sample = arrayListOf(
-        R.drawable.ic_launcher_background,
-        R.drawable.ic_launcher_background,
-        R.drawable.ic_launcher_background,
-        R.drawable.ic_launcher_background,
-        R.drawable.ic_launcher_background,
-        R.drawable.ic_launcher_background
+    // 임시
+    private val default = listOf<TagModel>(
+        TagModel("image", "장소"),
+        TagModel("image", "동물")
     )
 
-    private val _itemList = MutableLiveData<ArrayList<Int>>(sample)
-    val itemList: LiveData<ArrayList<Int>> get() = _itemList
+    private val _itemList = MutableLiveData<List<TagModel>>(default)
+    val itemList: LiveData<List<TagModel>> get() = _itemList
 }

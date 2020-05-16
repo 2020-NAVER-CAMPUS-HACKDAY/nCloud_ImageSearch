@@ -19,7 +19,7 @@
             android:id="@+id/layout_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:setItem="@{vm.itemList}" />
+            app:setAlbumItem="@{vm.itemList}" />
     </LinearLayout>
 
 </layout>

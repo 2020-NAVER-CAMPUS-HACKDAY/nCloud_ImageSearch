@@ -10,15 +10,10 @@ import io.reactivex.observers.DisposableSingleObserver
 
 class PhotoViewModel : ViewModel() {
 
-    //default
-    private val default = listOf<PhotoInfo>(
-        PhotoInfo("0", "1", "1", "1", "9", "1", "1")
-    )
-
     private val disposable: CompositeDisposable = CompositeDisposable()
     private val repository = getPhotoRepositoryImpl()
 
-    private val _itemList = MutableLiveData<List<PhotoInfo>>(default)
+    private val _itemList = MutableLiveData<List<PhotoInfo>>(ArrayList())
     val itemList: LiveData<List<PhotoInfo>> get() = _itemList
 
 

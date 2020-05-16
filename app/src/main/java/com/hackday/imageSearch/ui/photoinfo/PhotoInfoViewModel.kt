@@ -6,6 +6,7 @@ import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryImpl
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.subjects.PublishSubject
 
 
 class PhotoInfoViewModel (
@@ -15,6 +16,13 @@ class PhotoInfoViewModel (
     val disposable: CompositeDisposable = CompositeDisposable()
 
     var photoOne : MutableLiveData<PhotoInfo> = MutableLiveData()
+    val photoInfoList = MutableLiveData<ArrayList<PhotoInfo>>().apply {
+        value = ArrayList()
+    }
+
+    init {
+        subscribePhotoInfoList()
+    }
 
     fun getAll(){
         disposable.add(
@@ -99,6 +107,15 @@ class PhotoInfoViewModel (
         disposable.add(
             photoInfoRepository.insertPhotoList(photoInfoList)
                 .subscribe()
+        )
+    }
+
+    private fun subscribePhotoInfoList(){
+        disposable.add(
+            PublishSubject.create<PhotoInfo>().subscribe{
+                photoInfoList.value?.add(it)
+                photoInfoList.postValue(photoInfoList.value)
+            }
         )
     }
 

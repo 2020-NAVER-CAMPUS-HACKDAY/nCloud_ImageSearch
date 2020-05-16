@@ -10,9 +10,9 @@ interface PhotoInfoRepository{
     fun delete(photoInfo: PhotoInfo): Completable
     fun getPhotoById(photoId: String): Single<PhotoInfo>
     fun getPhotoByUri(uri: String): Single<PhotoInfo>
-    fun getPhotoByTag1(tag1: String): Single<PhotoInfo>
-    fun getPhotoByTag2(tag2: String): Single<PhotoInfo>
-    fun getPhotoByTag3(tag3: String): Single<PhotoInfo>
+    fun getPhotoByTag1(tag1: String): Single<List<PhotoInfo>>
+    fun getPhotoByTag2(tag2: String): Single<List<PhotoInfo>>
+    fun getPhotoByTag3(tag3: String): Single<List<PhotoInfo>>
     fun insertPhoto(photoInfo: PhotoInfo): Completable
     fun insertPhotoList(photoInfoList: ArrayList<PhotoInfo>): Completable
 }

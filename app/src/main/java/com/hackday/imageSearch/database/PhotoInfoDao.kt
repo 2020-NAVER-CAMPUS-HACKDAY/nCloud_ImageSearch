@@ -31,11 +31,11 @@ interface PhotoInfoDao {
     fun getPhotoByUri(uri: String): Single<PhotoInfo>
 
     @Query("SELECT * FROM photoinfo WHERE tag1= :tag1")
-    fun getPhotoByTag1(tag1: String): Single<PhotoInfo>
+    fun getPhotoByTag1(tag1: String): Single<List<PhotoInfo>>
 
     @Query("SELECT * FROM photoinfo WHERE tag2= :tag2")
-    fun getPhotoByTag2(tag2: String): Single<PhotoInfo>
+    fun getPhotoByTag2(tag2: String): Single<List<PhotoInfo>>
 
     @Query("SELECT * FROM photoinfo WHERE tag3= :tag3")
-    fun getPhotoByTag3(tag3: String): Single<PhotoInfo>
+    fun getPhotoByTag3(tag3: String): Single<List<PhotoInfo>>
 }

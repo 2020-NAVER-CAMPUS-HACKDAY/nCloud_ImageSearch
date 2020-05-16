@@ -53,21 +53,21 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getPhotoByTag1(tag1: String): Single<PhotoInfo> {
+    override fun getPhotoByTag1(tag1: String): Single<List<PhotoInfo>> {
         return photoInfoDao
             .getPhotoByTag1(tag1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getPhotoByTag2(tag2: String): Single<PhotoInfo> {
+    override fun getPhotoByTag2(tag2: String): Single<List<PhotoInfo>> {
         return photoInfoDao
             .getPhotoByTag2(tag2)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getPhotoByTag3(tag3: String): Single<PhotoInfo> {
+    override fun getPhotoByTag3(tag3: String): Single<List<PhotoInfo>> {
         return photoInfoDao
             .getPhotoByTag3(tag3)
             .subscribeOn(Schedulers.io())

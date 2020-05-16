@@ -1,23 +1,22 @@
 package com.hackday.imageSearch.ml
 
-import android.app.Activity
 import android.content.BroadcastReceiver
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.MediaStore.MediaColumns
 import android.text.TextUtils
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.hackday.imageSearch.R
-import com.hackday.imageSearch.databinding.ActivityMainBinding
 import com.hackday.imageSearch.databinding.ActivitySplashBinding
-import com.hackday.imageSearch.ui.main.MainViewModel
+import java.util.*
 
 
 class MLActivity : AppCompatActivity(){
@@ -30,41 +29,48 @@ class MLActivity : AppCompatActivity(){
 
         val binding : ActivitySplashBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
         initBinding(binding)
+
+        startLabelWork()
     }
 
     private fun initBinding(binding:ActivitySplashBinding){
         viewModel = ViewModelProvider(this).get(MLViewModel::class.java)
 
         with(binding){
-
             vm=viewModel
             lifecycleOwner=this@MLActivity
         }
     }
 
 
+    private fun startLabelWork() {
+        val workRequest = createWorkRequest()
 
-    private fun getPathOfAllImages(): ArrayList<String>? {
-        val result: ArrayList<String> = ArrayList()
-        val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val projection =
-            arrayOf(MediaColumns.DATA, MediaColumns.DISPLAY_NAME)
+        startWorkRequest(workRequest)
 
-        val cursor =
-            contentResolver.query(uri, projection, null, null, MediaColumns.DATE_ADDED + " desc")
-
-        val columnIndex: Int = cursor?.getColumnIndexOrThrow(MediaColumns.DATA) ?: return result
-        while (cursor.moveToNext()) {
-            val absolutePathOfImage: String = cursor.getString(columnIndex)
-            if (!TextUtils.isEmpty(absolutePathOfImage)) {
-                result.add(absolutePathOfImage)
-            }
+        whenProgressIsUpdatedThenDoThis(workRequest.id) { newProgress ->
+            viewModel.setProgress(newProgress)
         }
-        for (string in result) {
-            Log.i("PhotoSelectActivity.java | getPathOfAllImages", "|$string|")
-        }
-        cursor.close();
-        return result
     }
+
+    private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>().build()
+
+    private fun startWorkRequest(workRequest: WorkRequest) = getWorkManager().enqueue(workRequest)
+
+    private fun getWorkManager() = WorkManager.getInstance(this)
+
+    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int) -> Any) {
+        getWorkManager()
+            .getWorkInfoByIdLiveData(workId)
+            .observe(this, Observer { workInfo: WorkInfo? ->
+                workInfo?.let {
+                    onUpdate(it.progress.getInt("progress", 0))
+
+                }
+            })
+    }
+
+
+
 }
 

@@ -1,22 +1,21 @@
 package com.hackday.imageSearch.ui.photo.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.model.PhotoInfo
 
-class PhotoRecyclerAdapter(val photoClick: (PhotoInfo)-> Unit) :
+class PhotoRecyclerAdapter(val photoClick: (PhotoInfo) -> Unit) :
     RecyclerView.Adapter<PhotoRecyclerAdapter.Holder>() {
     lateinit var context: Context
-    //private var photoItemList = ArrayList<Int>() //sample함
-    private var photoItemList = ArrayList<PhotoInfo>()
+    lateinit var photoItemList: List<PhotoInfo>
 
 
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -24,9 +23,14 @@ class PhotoRecyclerAdapter(val photoClick: (PhotoInfo)-> Unit) :
         private val image = itemView.findViewById<ImageView>(R.id.img_photo)
 
         fun bind(photo: PhotoInfo) {
-            //date.text = "5월 12일 화요일" // sample
 
-            // Glide
+            Glide.with(context)
+                .load(photo.uri)
+                .error(R.drawable.ic_launcher_background)
+                .apply(RequestOptions().fitCenter())
+                .into(image)
+
+            date.text = photo.date
 
             itemView.setOnClickListener {
                 photoClick(photo)
@@ -51,8 +55,9 @@ class PhotoRecyclerAdapter(val photoClick: (PhotoInfo)-> Unit) :
     }
 
 
-    fun setItemList(itemList: ArrayList<PhotoInfo>) {
+    fun setItemList(itemList: List<PhotoInfo>) {
         photoItemList = itemList
+        notifyDataSetChanged()
     }
 
 }

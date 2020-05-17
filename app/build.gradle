@@ -84,4 +84,11 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
+    //Ted permission
+    implementation 'gun0912.ted:tedpermission:2.2.1'
+
+    //ML kit
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision-image-label-model:19.0.0'
+
 }

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "photoinfo")
 data class PhotoInfo(
     @ColumnInfo(name = "id")
-    var id : String, //photo name?
+    var id : String?, //photo name?
     @ColumnInfo(name = "date")
     var date : String, // yy-mm-dd? hh-mm-ss
     @ColumnInfo(name = "gps") //장소를 위한 위치 저장 값

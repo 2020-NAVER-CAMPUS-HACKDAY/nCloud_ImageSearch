@@ -4,11 +4,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.hackday.imageSearch.MyApplication
+import com.hackday.imageSearch.database.model.PhotoTag
 import com.hackday.imageSearch.model.PhotoInfo
 
-@Database(entities = [PhotoInfo::class], version = 1, exportSchema = false)
+@Database(entities = [PhotoInfo::class, PhotoTag::class], version = 1, exportSchema = false)
 abstract class PhotoInfoDatabase : RoomDatabase() {
     abstract fun photoInfoDao(): PhotoInfoDao
+    abstract fun photoTagDao(): PhotoTagDao
 
     companion object{
         private const val DB_NAME = "photoinfo.db"

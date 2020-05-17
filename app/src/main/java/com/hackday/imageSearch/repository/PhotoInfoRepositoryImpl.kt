@@ -2,14 +2,17 @@ package com.hackday.imageSearch.repository
 
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.database.PhotoInfoDatabase
+import com.hackday.imageSearch.database.model.PhotoTag
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class PhotoInfoRepositoryImpl : PhotoInfoRepository {
+class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
     private val photoInfoDao = PhotoInfoDatabase.getInstance()
         .photoInfoDao()
+    private val photoTagDao = PhotoInfoDatabase.getInstance()
+        .photoTagDao()
 
     companion object{
         @Volatile
@@ -88,4 +91,31 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    override fun insertTag(photoTag: PhotoTag?): Completable {
+        return photoTagDao
+            .insertTag(photoTag)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun getAllTag(): Single<List<PhotoTag>> {
+        return photoTagDao
+            .getAllTag()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun deleteAllTag(): Completable {
+        return photoTagDao
+            .deleteAllTag()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun deleteTag(photoTag: PhotoTag?): Completable {
+        return photoTagDao
+            .deleteTag(photoTag)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 }

@@ -1,6 +1,7 @@
 package com.hackday.imageSearch.ui.main
 
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseActivity
 import com.hackday.imageSearch.databinding.ActivityMainBinding
@@ -22,6 +23,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
 
         setViewPager()
+        observe()
     }
 
     private fun setViewPager() {
@@ -31,5 +33,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         layout_tab_layout.apply {
             setupWithViewPager(layout_viewPager)
         }
+    }
+
+    private fun observe() {
+        vm.isAlbumSelected.observe(this, Observer {
+            if (it) {
+                toast("눌렀당!" + vm.albumTagName.value)
+            }
+        })
     }
 }

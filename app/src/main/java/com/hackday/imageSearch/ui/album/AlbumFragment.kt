@@ -34,7 +34,12 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
         val recyclerManager = LinearLayoutManager(context!!, RecyclerView.HORIZONTAL, false)
 
         with(layout_recycler_view) {
-            adapter = AlbumRecyclerAdapter()
+            adapter = AlbumRecyclerAdapter().apply {
+                setOnItemClickListener { position, label ->
+                    toast(position.toString() + label)
+                }
+
+            }
             layoutManager = recyclerManager
             setHasFixedSize(false)
             addItemDecoration(AlbumItemDecorator())

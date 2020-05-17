@@ -1,7 +1,6 @@
 package com.hackday.imageSearch.ui.photo
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hackday.imageSearch.R
@@ -14,19 +13,16 @@ import com.hackday.imageSearch.ui.viewer.ViewerActivity
 import kotlinx.android.synthetic.main.fragment_album.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PhotoFragment : BaseFragment<FragmentPhotoBinding>(),photoClickListener {
+class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), photoClickListener {
     override val vm: PhotoViewModel by viewModel()
     override fun getLayoutRes() = R.layout.fragment_photo
     override fun setupBinding() {
         binding.vm = vm
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        vm.getAll()
         setRecyclerView()
     }
 
@@ -45,7 +41,7 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(),photoClickListener {
     }
 
     override fun photoClicked(photo: PhotoInfo) {
-        var intent = Intent(context,ViewerActivity::class.java)
+        val intent = Intent(context, ViewerActivity::class.java)
         intent.putExtra(ViewerActivity.EXTRA_PHOTO_ID, photo.id)
         intent.putExtra(ViewerActivity.EXTRA_PHOTO_URI, photo.uri)
         startActivity(intent)

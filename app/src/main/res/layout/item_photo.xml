@@ -8,8 +8,7 @@
         android:id="@+id/txt_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:visibility="gone" />
+        android:textColor="@color/black" />
 
     <ImageView
         android:id="@+id/img_photo"

@@ -18,12 +18,12 @@ class PhotoInfoViewModel (
 
     var photoOne : MutableLiveData<PhotoInfo> = MutableLiveData()
 
-    fun getAll(){
-        disposable.add(
-            photoInfoRepository.getAll()
-                .subscribe()
-        )
-    }
+//    fun getAll(){
+//        disposable.add(
+//            photoInfoRepository.getAll()
+//                .subscribe()
+//        )
+//    }
 
     fun deleteAll(){
         disposable.add(

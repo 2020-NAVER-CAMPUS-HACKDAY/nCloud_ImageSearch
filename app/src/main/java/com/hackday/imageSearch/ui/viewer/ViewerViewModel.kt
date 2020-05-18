@@ -16,8 +16,14 @@ import io.reactivex.observers.DisposableSingleObserver
 class ViewerViewModel : ViewModel() {
 
     var vdate : String = ""
-    var vgps : String = ""
     var vtag1 : String = ""
     var vtag2 : String = ""
     var vtag3 : String = ""
+
+    val photoInfoRepository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
+
+    fun getPhotoByUri(uri: String): LiveData<PhotoInfo>{
+        return photoInfoRepository.getPhotoByUri(uri)
+    }
+
 }

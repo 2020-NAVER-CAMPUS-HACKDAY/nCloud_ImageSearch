@@ -30,35 +30,19 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
         binding.vm = vm
     }
 
-    val pvm = PhotoInfoViewModel(PhotoInfoRepositoryInjector.getPhotoRepositoryImpl())
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         loadImage()
 
-        // dialog에 출력
-        pvm.photoOne.observe(this, Observer {
-
-            val builder = AlertDialog.Builder(this)
-            val dialogView = layoutInflater.inflate(R.layout.dialog_viewer_infodetail, null)
-
+        vm.getPhotoByUri(uri).observe(this, Observer {
             vm.vdate = it.date
-            vm.vgps =  it.gps.toString()
-            vm.vtag1 = it.tag1
-            vm.vtag2 = it.tag2
-            vm.vtag3 = it.tag3
+            vm.vtag1 = it.tag1.toString()
+            vm.vtag2 = it.tag2.toString()
+            vm.vtag3 = it.tag3.toString()
             setupBinding()
-
-            builder.setView(dialogView).create().show()
         })
 
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        pvm.disposable.clear()
     }
 
     override fun onStart() {
@@ -69,7 +53,7 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
         }
 
         btn_detail.setOnClickListener {
-            loadDetail()
+            dialogDetail()
         }
     }
 
@@ -87,9 +71,10 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
         }
     }
 
-    fun loadDetail(){
-        // uri를 통해 photo 데이터 로드
-        pvm.getPhotoByUri(uri)
+    fun dialogDetail(){
+        val builder = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_viewer_infodetail, null)
+        builder.setView(dialogView).create().show()
     }
 
     companion object{

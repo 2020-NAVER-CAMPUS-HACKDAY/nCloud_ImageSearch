@@ -1,6 +1,7 @@
 package com.hackday.imageSearch.ui.album
 
 import android.os.Bundle
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hackday.imageSearch.R
@@ -8,6 +9,7 @@ import com.hackday.imageSearch._base.BaseFragment
 import com.hackday.imageSearch.databinding.FragmentAlbumBinding
 import com.hackday.imageSearch.ui.album.adapter.AlbumItemDecorator
 import com.hackday.imageSearch.ui.album.adapter.AlbumRecyclerAdapter
+import com.hackday.imageSearch.ui.main.MainViewModel
 import kotlinx.android.synthetic.main.fragment_album.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -18,10 +20,10 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
         binding.vm = vm
     }
 
+    private val mvm by activityViewModels<MainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -31,10 +33,16 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
 
     private fun setRecyclerView() {
 
-        val recyclerManager = LinearLayoutManager(context!!, RecyclerView.HORIZONTAL, false)
+        val recyclerManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
         with(layout_recycler_view) {
-            adapter = AlbumRecyclerAdapter()
+            adapter = AlbumRecyclerAdapter().apply {
+                setOnItemClickListener { position, label ->
+                    mvm.setAlbumTagName(position, label)
+                    mvm.setIsAlbumSelected(true)
+                }
+
+            }
             layoutManager = recyclerManager
             setHasFixedSize(false)
             addItemDecoration(AlbumItemDecorator())

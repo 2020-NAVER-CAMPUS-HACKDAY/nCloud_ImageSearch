@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="vm"
             type="com.hackday.imageSearch.ui.main.MainViewModel" />
@@ -25,15 +27,15 @@
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_start"
-            android:layout_width="0.1dp"
-            android:layout_height="0.1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_begin="20dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_end"
-            android:layout_width="0.1dp"
-            android:layout_height="0.1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="20dp" />
 
@@ -42,6 +44,7 @@
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> vm.setBack()}"
             android:text="뒤"
             app:layout_constraintStart_toStartOf="@id/guide_start"
             app:layout_constraintTop_toTopOf="@id/guide_top" />
@@ -66,18 +69,28 @@
             app:layout_constraintEnd_toEndOf="@id/guide_end"
             app:layout_constraintTop_toTopOf="@id/guide_top" />
 
+        <LinearLayout
+            android:id="@+id/layout_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="@{vm.isAlbumSelected? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@id/btn_back" />
+
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/layout_viewPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:visibility="@{vm.isAlbumSelected? View.GONE : View.VISIBLE}"
             app:layout_constraintTop_toBottomOf="@id/btn_back" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/layout_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="@{vm.isAlbumSelected? View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

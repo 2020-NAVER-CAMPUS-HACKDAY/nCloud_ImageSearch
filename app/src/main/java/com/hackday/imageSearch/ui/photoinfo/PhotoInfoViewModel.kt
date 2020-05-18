@@ -2,6 +2,7 @@ package com.hackday.imageSearch.ui.photoinfo
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hackday.imageSearch.database.model.PhotoTag
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryImpl
 import io.reactivex.disposables.CompositeDisposable
@@ -98,6 +99,34 @@ class PhotoInfoViewModel (
     fun insertPhotoList(photoInfoList: ArrayList<PhotoInfo>){
         disposable.add(
             photoInfoRepository.insertPhotoList(photoInfoList)
+                .subscribe()
+        )
+    }
+
+    fun insertTag(photoTag: PhotoTag){
+        disposable.add(
+            photoInfoRepository.insertTag(photoTag)
+                .subscribe()
+        )
+    }
+
+    fun getAlltag(){
+        disposable.add(
+            photoInfoRepository.getAllTag()
+                .subscribe()
+        )
+    }
+
+    fun deleteAllTag(){
+        disposable.add(
+            photoInfoRepository.deleteAllTag()
+                .subscribe()
+        )
+    }
+
+    fun deleteTag(photoTag: PhotoTag){
+        disposable.add(
+            photoInfoRepository.deleteTag(photoTag)
                 .subscribe()
         )
     }

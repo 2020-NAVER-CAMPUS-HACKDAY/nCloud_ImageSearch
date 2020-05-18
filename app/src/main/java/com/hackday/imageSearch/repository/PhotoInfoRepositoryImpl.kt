@@ -1,9 +1,10 @@
 package com.hackday.imageSearch.repository
 
 import androidx.lifecycle.LiveData
-import com.hackday.imageSearch.model.PhotoInfo
+import androidx.paging.DataSource
 import com.hackday.imageSearch.database.PhotoInfoDatabase
 import com.hackday.imageSearch.database.model.PhotoTag
+import com.hackday.imageSearch.model.PhotoInfo
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,10 +26,8 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
             }
     }
 
-    override fun getAll(): Single<List<PhotoInfo>> {
+    override fun getAll(): DataSource.Factory<Int, PhotoInfo> {
         return photoInfoDao.getAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun deleteAll(): Completable {

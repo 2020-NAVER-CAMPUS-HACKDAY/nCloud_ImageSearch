@@ -1,12 +1,13 @@
 package com.hackday.imageSearch.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import com.hackday.imageSearch.model.PhotoInfo
 import io.reactivex.Completable
 import io.reactivex.Single
 
-interface PhotoInfoRepository{
-    fun getAll(): Single<List<PhotoInfo>>
+interface PhotoInfoRepository {
+    fun getAll(): DataSource.Factory<Int, PhotoInfo>
     fun deleteAll(): Completable
     fun delete(photoInfo: PhotoInfo): Completable
     fun getPhotoByUri(uri: String): LiveData<PhotoInfo>

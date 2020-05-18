@@ -54,6 +54,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.lifecycle_version"
     implementation "androidx.fragment:fragment-ktx:1.2.4"
+    implementation "androidx.paging:paging-runtime-ktx:$rootProject.paging_version"
 
     implementation 'com.android.support:design:29.1.0'
 

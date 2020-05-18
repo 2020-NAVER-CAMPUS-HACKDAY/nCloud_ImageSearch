@@ -20,7 +20,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
 
-    private lateinit var id: String
     private lateinit var uri: String
 
     override val vm: ViewerViewModel by viewModel()
@@ -30,35 +29,19 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
         binding.vm = vm
     }
 
-    val pvm = PhotoInfoViewModel(PhotoInfoRepositoryInjector.getPhotoRepositoryImpl())
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         loadImage()
 
-        // dialog에 출력
-        pvm.photoOne.observe(this, Observer {
-
-            val builder = AlertDialog.Builder(this)
-            val dialogView = layoutInflater.inflate(R.layout.dialog_viewer_infodetail, null)
-
+        vm.getPhotoByUri(uri).observe(this, Observer {
             vm.vdate = it.date
-            vm.vgps =  it.gps.toString()
-            vm.vtag1 = it.tag1
-            vm.vtag2 = it.tag2
-            vm.vtag3 = it.tag3
+            vm.vtag1 = it.tag1.toString()
+            vm.vtag2 = it.tag2.toString()
+            vm.vtag3 = it.tag3.toString()
             setupBinding()
-
-            builder.setView(dialogView).create().show()
         })
 
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        pvm.disposable.clear()
     }
 
     override fun onStart() {
@@ -69,14 +52,13 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
         }
 
         btn_detail.setOnClickListener {
-            loadDetail()
+            dialogDetail()
         }
     }
 
     fun loadImage(){
         // photoFragment 에서 전달되는 id, uri 받기
-        if(intent != null && intent.hasExtra(EXTRA_PHOTO_ID) && intent.hasExtra(EXTRA_PHOTO_URI)){
-            id = intent.getStringExtra(EXTRA_PHOTO_ID)!!
+        if(intent != null && intent.hasExtra(EXTRA_PHOTO_URI)){
             uri = intent.getStringExtra(EXTRA_PHOTO_URI)!!
 
             Glide.with(this)
@@ -87,15 +69,14 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
         }
     }
 
-    fun loadDetail(){
-        // uri를 통해 photo 데이터 로드
-        pvm.getPhotoByUri(uri)
+    fun dialogDetail(){
+        val builder = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_viewer_infodetail, null)
+        builder.setView(dialogView).create().show()
     }
 
     companion object{
-        const val EXTRA_PHOTO_ID = "EXTRA_PHOTO_ID"
         const val EXTRA_PHOTO_DATE = "EXTRA_PHOTO_DATE"
-        const val EXTRA_PHOTO_GPS = "EXTRA_PHOTO_GPS"
         const val EXTRA_PHOTO_URI = "EXTRA_PHOTO_URI"
         const val EXTRA_PHOTO_TAG1 = "EXTRA_PHOTO_TAG1"
         const val EXTRA_PHOTO_TAG2 = "EXTRA_PHOTO_TAG2"

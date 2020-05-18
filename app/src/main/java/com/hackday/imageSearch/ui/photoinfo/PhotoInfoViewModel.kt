@@ -1,5 +1,6 @@
 package com.hackday.imageSearch.ui.photoinfo
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hackday.imageSearch.database.model.PhotoTag
@@ -38,34 +39,8 @@ class PhotoInfoViewModel (
         )
     }
 
-    fun getPhotoById(id: String){
-        disposable.add(
-            photoInfoRepository.getPhotoById(id)
-                .subscribeWith(object : DisposableSingleObserver<PhotoInfo>(){
-                    override fun onSuccess(t: PhotoInfo) {
-                        photoOne.value = t
-                    }
-
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                    }
-                })
-        )
-    }
-
-    fun getPhotoByUri(uri: String){
-        disposable.add(
-            photoInfoRepository.getPhotoByUri(uri)
-                .subscribeWith(object : DisposableSingleObserver<PhotoInfo>(){
-                    override fun onSuccess(t: PhotoInfo) {
-                        photoOne.value = t
-                    }
-
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                    }
-                })
-        )
+    fun getPhotoByUri(uri: String): LiveData<PhotoInfo> {
+        return photoInfoRepository.getPhotoByUri(uri)
     }
 
     fun getPhotoByTag1(tag1: String){

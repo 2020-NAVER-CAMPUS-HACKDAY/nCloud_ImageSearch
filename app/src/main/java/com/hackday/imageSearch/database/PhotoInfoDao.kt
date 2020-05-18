@@ -24,11 +24,8 @@ interface PhotoInfoDao {
     @Delete
     fun delete(photoInfo: PhotoInfo?): Completable
 
-    @Query("SELECT * FROM photoinfo WHERE id= :id")
-    fun getPhotoById(id: String): Single<PhotoInfo>
-
     @Query("SELECT * FROM photoinfo WHERE uri= :uri")
-    fun getPhotoByUri(uri: String): Single<PhotoInfo>
+    fun getPhotoByUri(uri: String): LiveData<PhotoInfo>
 
     @Query("SELECT * FROM photoinfo WHERE tag1= :tag1")
     fun getPhotoByTag1(tag1: String): Single<List<PhotoInfo>>

@@ -1,5 +1,6 @@
 package com.hackday.imageSearch.repository
 
+import androidx.lifecycle.LiveData
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.database.PhotoInfoDatabase
 import com.hackday.imageSearch.database.model.PhotoTag
@@ -42,18 +43,9 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getPhotoById(photoId: String): Single<PhotoInfo> {
-        return photoInfoDao
-            .getPhotoById(photoId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    override fun getPhotoByUri(uri: String): Single<PhotoInfo> {
+    override fun getPhotoByUri(uri: String): LiveData<PhotoInfo> {
         return photoInfoDao
             .getPhotoByUri(uri)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun getPhotoByTag1(tag1: String): Single<List<PhotoInfo>> {

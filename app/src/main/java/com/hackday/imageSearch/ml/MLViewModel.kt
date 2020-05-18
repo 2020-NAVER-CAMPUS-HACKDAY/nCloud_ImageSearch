@@ -8,11 +8,17 @@ import com.hackday.imageSearch.model.PhotoInfo
 
 class MLViewModel:ViewModel() {
 
-    private val _progress = MutableLiveData<Int>()
-    val progress:LiveData<Int> =_progress
+    private val _current = MutableLiveData<Int>()
+    val current:LiveData<Int> =_current
 
-    fun setProgress(progress:Int)
+    private val _total = MutableLiveData<Int>()
+    val total:LiveData<Int> = _total
+    fun setCurrent(current:Int)
     {
-        _progress.postValue(progress)
+        _current.postValue(current)
+    }
+    fun setTotal(total:Int)
+    {
+        _total.postValue(total)
     }
 }

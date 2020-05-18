@@ -42,7 +42,6 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), photoClickListener {
 
     override fun photoClicked(photo: PhotoInfo) {
         val intent = Intent(context, ViewerActivity::class.java)
-        intent.putExtra(ViewerActivity.EXTRA_PHOTO_ID, photo.id)
         intent.putExtra(ViewerActivity.EXTRA_PHOTO_URI, photo.uri)
         startActivity(intent)
     }

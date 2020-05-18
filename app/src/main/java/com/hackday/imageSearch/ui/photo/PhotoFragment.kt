@@ -28,7 +28,7 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), photoClickListener {
 
     private fun setRecyclerView() {
 
-        val recyclerManager = GridLayoutManager(context!!, 4)
+        val recyclerManager = GridLayoutManager(context, 4)
 
         with(layout_recycler_view) {
             adapter = PhotoRecyclerAdapter { photo ->

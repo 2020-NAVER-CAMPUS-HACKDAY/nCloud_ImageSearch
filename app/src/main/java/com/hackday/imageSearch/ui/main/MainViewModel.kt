@@ -18,7 +18,7 @@ class MainViewModel : ViewModel() {
     private val _back = MutableLiveData<Boolean>(false)
     val back: LiveData<Boolean> get() = _back
 
-    fun setFlag(flag: Boolean) {
+    fun setIsAlbumSelected(flag: Boolean) {
         _isAlbumSelected.value = flag
     }
 

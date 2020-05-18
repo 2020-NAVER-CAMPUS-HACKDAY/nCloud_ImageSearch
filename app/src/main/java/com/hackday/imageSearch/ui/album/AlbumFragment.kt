@@ -1,7 +1,7 @@
 package com.hackday.imageSearch.ui.album
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hackday.imageSearch.R
@@ -20,13 +20,10 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
         binding.vm = vm
     }
 
-    lateinit var mvm: MainViewModel
+    private val mvm by activityViewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mvm = activity?.run {
-            ViewModelProvider(this)[MainViewModel::class.java]
-        } ?: throw Exception("Invalid")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -36,13 +33,13 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
 
     private fun setRecyclerView() {
 
-        val recyclerManager = LinearLayoutManager(context!!, RecyclerView.HORIZONTAL, false)
+        val recyclerManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
         with(layout_recycler_view) {
             adapter = AlbumRecyclerAdapter().apply {
                 setOnItemClickListener { position, label ->
                     mvm.setAlbumTagName(position, label)
-                    mvm.setFlag(true)
+                    mvm.setIsAlbumSelected(true)
                 }
 
             }

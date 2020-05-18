@@ -49,14 +49,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         vm.back.observe(this, Observer {
             if (it) {
-                vm.setFlag(false)
+                vm.setIsAlbumSelected(false)
             }
         })
     }
 
     override fun onBackPressed() {  // 뒤로가기 눌렀을 때 바로 앱 종료되는 것 막기
         if (vm.isAlbumSelected.value!!) {
-            vm.setFlag(false)
+            vm.setIsAlbumSelected(false)
         } else {
             super.onBackPressed()
         }

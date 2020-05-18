@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "434313345108",
+    "firebase_url": "https://hackdayimagesearch.firebaseio.com",
+    "project_id": "hackdayimagesearch",
+    "storage_bucket": "hackdayimagesearch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434313345108:android:5639037b279ec5a89295c1",
+        "android_client_info": {
+          "package_name": "com.hackday.ImageSearch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434313345108-u4e22o7sk98aepm94ie835cq1fa8nbdk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hackday.ImageSearch",
+            "certificate_hash": "701d11ec06c7f05750d9587badbdcc0d48c44695"
+          }
+        },
+        {
+          "client_id": "434313345108-5gdgk7fju7tag5c2hgrrkhradtjiae7k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwkeSBbvVfoiraqGnmlK_Ptxj6OQx0TT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "434313345108-5gdgk7fju7tag5c2hgrrkhradtjiae7k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

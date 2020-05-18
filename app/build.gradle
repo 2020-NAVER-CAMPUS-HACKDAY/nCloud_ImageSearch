@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -91,5 +92,6 @@ dependencies {
     //ML kit
     implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:19.0.0'
+
 
 }

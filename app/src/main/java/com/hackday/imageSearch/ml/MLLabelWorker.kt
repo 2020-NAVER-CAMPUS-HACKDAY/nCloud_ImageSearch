@@ -13,6 +13,7 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationBuilderWithBuilderAccessor
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.room.Room
 import androidx.work.*
@@ -35,9 +36,7 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
         try {
             getNoneLabeledList()
             setForegroundAsync(createForegroundInfo("labeling...."))
-            addLabelToImageIfNeeded {current,total ->
-                reportProgress(current,total)
-            }
+            addLabelToImageIfNeeded()
         } catch (e: Exception) {
             e.printStackTrace()
             return Result.failure()
@@ -46,17 +45,16 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
         return Result.success()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createForegroundInfo(progress :String):ForegroundInfo{
 
-        val channelId = if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O)
+        val channelId:String = if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O)
         {
             createNotificationChannel("channelId","channelName")
         }else
         {
-
+            ""
         }
-        val notification = Notification.Builder(applicationContext,"${context.packageName}")
+        val notification = NotificationCompat.Builder(applicationContext,channelId)
             .setContentText(progress)
             .build()
 
@@ -78,39 +76,37 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
     {
         val idColumnName = MediaStore.Images.ImageColumns._ID
         val pathColumnName = MediaStore.Images.ImageColumns.DATA
+        val dateColumnName = MediaStore.Images.ImageColumns.DATE_ADDED
 
         val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val projection = arrayOf(idColumnName, pathColumnName)
+        val projection = arrayOf(idColumnName, pathColumnName,dateColumnName)
 
         context
             .contentResolver
             .query(uri, projection, null, null, MediaStore.MediaColumns.DATE_ADDED + " desc")
             ?.use {
                 val idColumnIndex = it.getColumnIndexOrThrow(idColumnName)
-
+                val dateColumnIndex = it.getColumnIndexOrThrow(dateColumnName)
                 while (it.moveToNext()) {
                     val uriAndDate = Pair(ContentUris.withAppendedId(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        it.getLong(idColumnIndex)).toString(),MediaStore.Images.Media.DATE_ADDED.toString())
+                        it.getLong(idColumnIndex)).toString(),it.getLong(dateColumnIndex).toString())
                     pathArrayList.add(
                         uriAndDate
                     )
                 }
             }
-
-
-
     }
 
 
-    private fun addLabelToImageIfNeeded(doThis: (Int,Int) -> Any ) {
+    private fun addLabelToImageIfNeeded() {
 
         var howManyLabeled = 0
         lateinit var labelImage : FirebaseVisionImage
         for(uriAndDate in pathArrayList)
         {
             try {
-                labelImage = FirebaseVisionImage.fromFilePath(context,Uri.parse(uriAndDate.first.toString()))
+                labelImage = FirebaseVisionImage.fromFilePath(context,Uri.parse(uriAndDate.first))
             }catch (e:IOException)
             {
                 e.printStackTrace()
@@ -119,28 +115,15 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
             val detector = FirebaseVision.getInstance().getOnDeviceImageLabeler()
             detector.processImage(labelImage)
                 .addOnSuccessListener { labels->
-                    if(labels.size==0)
-                    {
-                        PhotoInfoDatabase.getInstance().photoInfoDao().insertPhoto(PhotoInfo(uriAndDate.first,uriAndDate.second,
-                            null,null,null));
+                    when (labels.size) {
+                        1 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, null,null)
+                        2 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, labels[1].text, null)
+                        3 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, labels[1].text, labels[2].text)
+                        else -> PhotoInfo(uriAndDate.first, uriAndDate.second, null, null, null)
+                    }.let {
+                        PhotoInfoDatabase.getInstance().photoInfoDao().insertPhoto(it)
                     }
-                    else if(labels.size==1)
-                    {
-                        PhotoInfoDatabase.getInstance().photoInfoDao().insertPhoto(PhotoInfo(uriAndDate.first,uriAndDate.second,
-                            labels[0].text,null,null));
-                    }
-                    else if(labels.size==2)
-                    {
-                        PhotoInfoDatabase.getInstance().photoInfoDao().insertPhoto(PhotoInfo(uriAndDate.first,uriAndDate.second,
-                            labels[0].text,labels[1].text,null));
-                    }
-                    else
-                    {
-                        PhotoInfoDatabase.getInstance().photoInfoDao().insertPhoto(PhotoInfo(uriAndDate.first,uriAndDate.second,
-                            labels[0].text,labels[1].text,labels[2].text));
-                    }
-
-                    doThis(++howManyLabeled,pathArrayList.size)
+                    reportProgress(++howManyLabeled,pathArrayList.size)
                 }
         }
     }

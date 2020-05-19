@@ -3,6 +3,7 @@ package com.hackday.imageSearch.ml
 import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,6 +11,7 @@ import android.provider.MediaStore.MediaColumns
 import android.text.TextUtils
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,8 +36,12 @@ class MLActivity : AppCompatActivity(){
 
         val binding : ActivitySplashBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
         initBinding(binding)
+
         getPermission()
-        startLabelWork()
+
+        //startLabelWork()
+
+
     }
 
     private fun initBinding(binding:ActivitySplashBinding){
@@ -52,7 +58,7 @@ class MLActivity : AppCompatActivity(){
         var permissionListener: PermissionListener = object: PermissionListener {
 
             override fun onPermissionGranted() {
-
+                startLabelWork()
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {

@@ -36,4 +36,7 @@ interface PhotoInfoDao {
 
     @Query("SELECT * FROM photoinfo WHERE tag3= :tag3")
     fun getPhotoByTag3(tag3: String): Single<List<PhotoInfo>>
+
+    @Query("SELECT COUNT(uri) from photoinfo WHERE uri= :uri")
+    fun getUriCountbyUri(uri: String): Int
 }

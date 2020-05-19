@@ -27,7 +27,7 @@ class AlbumRecyclerAdapter : RecyclerView.Adapter<AlbumRecyclerAdapter.Holder>()
             Glide.with(context)
                 .load(photo.uri)
                 .error(R.drawable.ic_launcher_background)
-                .apply(RequestOptions().fitCenter())
+                .apply(RequestOptions().fitCenter().override(500, 500))
                 .into(image)
 
             label.text = photo.tag

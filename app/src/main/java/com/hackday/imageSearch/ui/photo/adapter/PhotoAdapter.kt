@@ -27,7 +27,7 @@ class PhotoAdapter(val photoClick: (PhotoInfo?) -> Unit) :
             Glide.with(context)
                 .load(photo?.uri)
                 .error(R.drawable.ic_launcher_background)
-                .apply(RequestOptions().fitCenter())
+                .apply(RequestOptions().fitCenter().override(500, 500))
                 .into(image)
 
             date.text = photo?.date

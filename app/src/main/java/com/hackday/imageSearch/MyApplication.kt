@@ -2,6 +2,7 @@ package com.hackday.imageSearch
 
 import android.app.Application
 import android.content.Context
+import com.hackday.imageSearch.di.appModule
 import com.hackday.imageSearch.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -11,6 +12,7 @@ class MyApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@MyApplication)
+            modules(appModule)
             modules(viewModelModule)
         }
     }

@@ -2,6 +2,7 @@ package com.hackday.imageSearch.database
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import com.hackday.imageSearch.model.PhotoInfo
 import io.reactivex.Completable
@@ -16,7 +17,7 @@ interface PhotoInfoDao {
     fun insertPhotoList(photoInfoList: ArrayList<PhotoInfo>?): Completable
 
     @Query("SELECT * FROM photoinfo")
-    fun getAll(): Single<List<PhotoInfo>>
+    fun getAll(): DataSource.Factory<Int, PhotoInfo>
 
     @Query("DELETE FROM photoinfo")
     fun deleteAll(): Completable

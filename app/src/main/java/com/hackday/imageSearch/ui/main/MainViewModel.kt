@@ -3,6 +3,9 @@ package com.hackday.imageSearch.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hackday.imageSearch.model.PhotoInfo
+import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
+import io.reactivex.disposables.CompositeDisposable
 
 class MainViewModel : ViewModel() {
 
@@ -30,4 +33,24 @@ class MainViewModel : ViewModel() {
     fun setBack() {
         _back.value = true
     }
+
+    // test
+    private val disposable: CompositeDisposable = CompositeDisposable()
+    private val repository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
+
+    var i = 0
+
+    fun test() {
+        val sample = PhotoInfo(i++.toString(), i++.toString(), "1", "1", "1")
+        disposable.add(
+            repository.insertPhoto(sample)
+                .subscribe()
+        )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
+    }
+
 }

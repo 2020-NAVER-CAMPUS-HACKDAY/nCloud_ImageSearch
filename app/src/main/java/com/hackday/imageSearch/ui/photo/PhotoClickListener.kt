@@ -1,10 +1,9 @@
 package com.hackday.imageSearch.ui.photo
 
-import android.net.Uri
 import com.hackday.imageSearch.model.PhotoInfo
 
-interface photoClickListener {
+interface PhotoClickListener {
     fun photoClicked(
-        photo: PhotoInfo
+        photo: PhotoInfo?
     )
 }

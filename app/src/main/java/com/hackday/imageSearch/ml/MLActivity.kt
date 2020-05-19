@@ -38,10 +38,6 @@ class MLActivity : AppCompatActivity(){
         initBinding(binding)
 
         getPermission()
-
-        //startLabelWork()
-
-
     }
 
     private fun initBinding(binding:ActivitySplashBinding){
@@ -108,6 +104,7 @@ class MLActivity : AppCompatActivity(){
                 workInfo?.let {
                     if(workInfo.state==WorkInfo.State.SUCCEEDED)
                     {
+
                         val nextIntent = Intent(this,MainActivity::class.java)
                         startActivity(nextIntent)
                         finish()

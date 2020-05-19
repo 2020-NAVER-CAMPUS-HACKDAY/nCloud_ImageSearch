@@ -53,8 +53,6 @@ class PhotoAdapter(val photoClick: (PhotoInfo?) -> Unit) :
     companion object {
         private val DIFF_CALLBACK = object :
             DiffUtil.ItemCallback<PhotoInfo>() {
-            // Concert details may have changed if reloaded from the database,
-            // but ID is fixed.
             override fun areItemsTheSame(
                 oldConcert: PhotoInfo,
                 newConcert: PhotoInfo

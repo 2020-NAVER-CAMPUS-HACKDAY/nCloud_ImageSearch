@@ -100,11 +100,16 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
                     val uri =ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         it.getLong(idColumnIndex)).toString()
                     val date = it.getLong(dateColumnIndex).toString()
-                    val count = PhotoInfoDatabase.getInstance().photoInfoDao().getUriCountbyUri(uri)
-                    val uriAndDate = Pair(uri,date)
-                    pathArrayList.add(
-                        uriAndDate
-                    )
+                    PhotoInfoDatabase
+                        .getInstance()
+                        .photoInfoDao()
+                        .getUriCountbyUri(uri)
+                        .takeIf { count -> count == 0 }?.let {
+                            val uriAndDate = Pair(uri,date)
+                            pathArrayList.add(
+                                uriAndDate
+                            )
+                    }
                 }
             }
     }

@@ -7,6 +7,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "phototag")
 data class PhotoTag(
     @PrimaryKey
-    @ColumnInfo(name="tag")
+    @ColumnInfo(name = "uri")
+    var uri: String,
+    @ColumnInfo(name = "tag")
     var tag: String
 )

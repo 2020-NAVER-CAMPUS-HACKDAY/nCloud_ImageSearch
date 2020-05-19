@@ -3,15 +3,38 @@ package com.hackday.imageSearch.ui.album
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hackday.imageSearch.database.model.PhotoTag
+import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
 
 class AlbumViewModel : ViewModel() {
 
-    // 임시
-    private val default = listOf<TagModel>(
-        TagModel("image", "장소"),
-        TagModel("image", "동물")
-    )
+    private val disposable: CompositeDisposable = CompositeDisposable()
+    private val repository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
 
-    private val _itemList = MutableLiveData<List<TagModel>>(default)
-    val itemList: LiveData<List<TagModel>> get() = _itemList
+    private val _itemList = MutableLiveData<List<PhotoTag>>(arrayListOf())
+    val itemList: LiveData<List<PhotoTag>> get() = _itemList
+
+    fun getTagName() {
+        disposable.add(
+            repository.getAllTag()
+                .subscribeWith(object : DisposableSingleObserver<List<PhotoTag>>() {
+                    override fun onSuccess(t: List<PhotoTag>) {
+                        _itemList.value = t
+                        //Log.d("MMMMM", t.toString())
+                    }
+
+                    override fun onError(e: Throwable) {
+                        e.printStackTrace()
+                    }
+                })
+        )
+    }
+
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.clear()
+    }
 }

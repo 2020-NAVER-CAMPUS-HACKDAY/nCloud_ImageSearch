@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hackday.imageSearch.R
-import com.hackday.imageSearch.ui.album.TagModel
+import com.hackday.imageSearch.database.model.PhotoTag
 
 class AlbumRecyclerAdapter : RecyclerView.Adapter<AlbumRecyclerAdapter.Holder>() {
     private lateinit var context: Context
-    private lateinit var albumItemList: List<TagModel>
+    private lateinit var albumItemList: List<PhotoTag>
     private var item: OnItemClickListener? = null
 
 
@@ -22,10 +22,10 @@ class AlbumRecyclerAdapter : RecyclerView.Adapter<AlbumRecyclerAdapter.Holder>()
         private val image = itemView.findViewById<ImageView>(R.id.img_album_thumbnail)
         private val label = itemView.findViewById<TextView>(R.id.txt_album_label)
 
-        fun bind(photo: TagModel, position: Int) {
+        fun bind(photo: PhotoTag, position: Int) {
 
             Glide.with(context)
-                .load(photo.thumbnail)
+                .load(photo.uri)
                 .error(R.drawable.ic_launcher_background)
                 .apply(RequestOptions().fitCenter())
                 .into(image)
@@ -53,7 +53,7 @@ class AlbumRecyclerAdapter : RecyclerView.Adapter<AlbumRecyclerAdapter.Holder>()
         return albumItemList.size
     }
 
-    fun setItemList(itemList: List<TagModel>) {
+    fun setItemList(itemList: List<PhotoTag>) {
         albumItemList = itemList
         notifyDataSetChanged()
     }

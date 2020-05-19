@@ -23,6 +23,8 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        vm.getTagName()
+        //toast(vm.itemList.value.toString())
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -78,6 +78,10 @@ class PhotoInfoViewModel (
         )
     }
 
+    fun getUriCountbyUri(uri: String): Int{
+        return photoInfoRepository.getUriCountbyUri(uri)
+    }
+
     fun insertTag(photoTag: PhotoTag){
         disposable.add(
             photoInfoRepository.insertTag(photoTag)

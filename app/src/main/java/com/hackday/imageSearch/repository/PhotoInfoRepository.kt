@@ -16,4 +16,5 @@ interface PhotoInfoRepository {
     fun getPhotoByTag3(tag3: String): Single<List<PhotoInfo>>
     fun insertPhoto(photoInfo: PhotoInfo): Completable
     fun insertPhotoList(photoInfoList: ArrayList<PhotoInfo>): Completable
+    fun getUriCountbyUri(uri: String): Int
 }

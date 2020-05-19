@@ -25,7 +25,10 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.hackday.imageSearch.database.PhotoInfoDatabase
+import com.hackday.imageSearch.di.viewModelModule
 import com.hackday.imageSearch.model.PhotoInfo
+import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
+import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
 import java.io.IOException
 import java.net.URI
 
@@ -33,6 +36,8 @@ import java.net.URI
 class MLLabelWorker (private val context: Context, private val workerParams:WorkerParameters) : Worker(context,workerParams){
 
     private var pathArrayList = ArrayList< Pair<String,String> >()
+
+    val pvm = PhotoInfoViewModel(PhotoInfoRepositoryInjector.getPhotoRepositoryImpl())
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
@@ -124,12 +129,12 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
             val labels = Tasks.await(processTask); //프로세스 이미지를
 
             when (labels.size) {
-                1 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, null,null)
-                2 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, labels[1].text, null)
-                3 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, labels[1].text, labels[2].text)
-                else -> PhotoInfo(uriAndDate.first, uriAndDate.second, null, null, null)
+                1 -> PhotoInfo(uriAndDate.second, uriAndDate.first, labels[0].text, null,null)
+                2 -> PhotoInfo(uriAndDate.second, uriAndDate.first, labels[0].text, labels[1].text, null)
+                3 -> PhotoInfo(uriAndDate.second, uriAndDate.first, labels[0].text, labels[1].text, labels[2].text)
+                else -> PhotoInfo(uriAndDate.second, uriAndDate.first, null, null, null)
             }.let {
-                PhotoInfoDatabase.getInstance().photoInfoDao().insertPhoto(it)
+                pvm.insertPhoto(it)
             }
             reportProgress(++howManyLabeled,pathArrayList.size)
         }

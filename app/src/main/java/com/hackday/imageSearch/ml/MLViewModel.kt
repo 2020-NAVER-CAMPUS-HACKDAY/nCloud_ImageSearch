@@ -2,6 +2,7 @@ package com.hackday.imageSearch.ml
 
 import android.app.Application
 import android.provider.ContactsContract
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.hackday.imageSearch.model.PhotoInfo

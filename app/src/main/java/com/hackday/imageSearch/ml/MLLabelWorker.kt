@@ -11,12 +11,15 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationBuilderWithBuilderAccessor
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.room.Room
 import androidx.work.*
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.gun0912.tedpermission.PermissionListener
@@ -89,16 +92,16 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
                 val idColumnIndex = it.getColumnIndexOrThrow(idColumnName)
                 val dateColumnIndex = it.getColumnIndexOrThrow(dateColumnName)
                 while (it.moveToNext()) {
-                    val uriAndDate = Pair(ContentUris.withAppendedId(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        it.getLong(idColumnIndex)).toString(),it.getLong(dateColumnIndex).toString())
+                    val uri =ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        it.getLong(idColumnIndex)).toString()
+                    val date = it.getLong(dateColumnIndex).toString()
+                    val uriAndDate = Pair(uri,date)
                     pathArrayList.add(
                         uriAndDate
                     )
                 }
             }
     }
-
 
     private fun addLabelToImageIfNeeded() {
 
@@ -114,18 +117,21 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
             }
 
             val detector = FirebaseVision.getInstance().getOnDeviceImageLabeler()
-            detector.processImage(labelImage)
-                .addOnSuccessListener { labels->
-                    when (labels.size) {
-                        1 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, null,null)
-                        2 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, labels[1].text, null)
-                        3 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, labels[1].text, labels[2].text)
-                        else -> PhotoInfo(uriAndDate.first, uriAndDate.second, null, null, null)
-                    }.let {
-                        PhotoInfoDatabase.getInstance().photoInfoDao().insertPhoto(it)
-                    }
-                    reportProgress(++howManyLabeled,pathArrayList.size)
-                }
+
+            val processTask = detector.processImage(labelImage)
+
+            /** blocking! */
+            val labels = Tasks.await(processTask); //프로세스 이미지를
+
+            when (labels.size) {
+                1 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, null,null)
+                2 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, labels[1].text, null)
+                3 -> PhotoInfo(uriAndDate.first, uriAndDate.second, labels[0].text, labels[1].text, labels[2].text)
+                else -> PhotoInfo(uriAndDate.first, uriAndDate.second, null, null, null)
+            }.let {
+                PhotoInfoDatabase.getInstance().photoInfoDao().insertPhoto(it)
+            }
+            reportProgress(++howManyLabeled,pathArrayList.size)
         }
     }
 

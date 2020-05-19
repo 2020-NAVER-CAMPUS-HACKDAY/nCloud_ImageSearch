@@ -2,11 +2,13 @@ package com.hackday.imageSearch.ml
 
 import android.Manifest
 import android.content.BroadcastReceiver
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.MediaStore.MediaColumns
 import android.text.TextUtils
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -19,6 +21,7 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.databinding.ActivitySplashBinding
+import com.hackday.imageSearch.ui.main.MainActivity
 import java.util.*
 
 
@@ -74,6 +77,7 @@ class MLActivity : AppCompatActivity(){
             viewModel.setCurrent(current)
             viewModel.setTotal(total)
         }
+        whenProgressIsUpdatedThenDoThis(workRequest.id)
     }
 
     private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>().build()
@@ -91,7 +95,20 @@ class MLActivity : AppCompatActivity(){
                 }
             })
     }
-
+    private fun whenProgressIsUpdatedThenDoThis(workId: UUID) {
+        getWorkManager()
+            .getWorkInfoByIdLiveData(workId)
+            .observe(this, Observer { workInfo: WorkInfo? ->
+                workInfo?.let {
+                    if(workInfo.state==WorkInfo.State.SUCCEEDED)
+                    {
+                        val nextIntent = Intent(this,MainActivity::class.java)
+                        startActivity(nextIntent)
+                        finish()
+                    }
+                }
+            })
+    }
 
 }
 

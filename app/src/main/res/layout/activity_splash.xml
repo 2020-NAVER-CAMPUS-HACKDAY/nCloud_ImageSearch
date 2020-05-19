@@ -21,7 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loading_color="#ffffff"
+            app:loading_color="#000000"
             app:loading_width="5dp" />
 
         <LinearLayout
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@{vm.current}" />
+                android:text="@{vm.current.toString()}" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@{vm.total}"/>
+                android:text="@{vm.total.toString()}"/>
         </LinearLayout>
 
 

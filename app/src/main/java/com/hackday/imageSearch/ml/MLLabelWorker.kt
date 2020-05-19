@@ -56,6 +56,7 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
         }
         val notification = NotificationCompat.Builder(applicationContext,channelId)
             .setContentText(progress)
+            .setSmallIcon(R.drawable.notification_icon_background)
             .build()
 
         return ForegroundInfo(1,notification)

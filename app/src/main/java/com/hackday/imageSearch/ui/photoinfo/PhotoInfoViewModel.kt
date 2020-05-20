@@ -3,7 +3,13 @@ package com.hackday.imageSearch.ui.photoinfo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.hackday.imageSearch.database.model.PhotoTag
+import com.hackday.imageSearch.event.PhotoInfoEvent
+import com.hackday.imageSearch.ml.MLLabelWorker
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryImpl
 import io.reactivex.disposables.CompositeDisposable
@@ -17,7 +23,9 @@ class PhotoInfoViewModel (
     val disposable: CompositeDisposable = CompositeDisposable()
 
     var photoOne : MutableLiveData<PhotoInfo> = MutableLiveData()
-
+    val photoInfoList = MutableLiveData<ArrayList<PhotoInfo>>().apply {
+        value = ArrayList()
+    }
 //    fun getAll(){
 //        disposable.add(
 //            photoInfoRepository.getAll()
@@ -78,7 +86,7 @@ class PhotoInfoViewModel (
         )
     }
 
-    fun getUriCountbyUri(uri: String): Int{
+    fun getUriCountbyUri(uri: String): Boolean{
         return photoInfoRepository.getUriCountbyUri(uri)
     }
 
@@ -107,6 +115,15 @@ class PhotoInfoViewModel (
         disposable.add(
             photoInfoRepository.deleteTag(photoTag)
                 .subscribe()
+        )
+    }
+
+    fun subscribePhotoInfoEvent(){
+        disposable.add(
+            PhotoInfoEvent.addPhotoInfoListSubject.subscribe(){
+                photoInfoList.value?.add(it)
+                photoInfoList.postValue(photoInfoList.value)
+            }
         )
     }
 

@@ -1,17 +1,9 @@
 package com.hackday.imageSearch.ml
 
 import android.Manifest
-import android.content.BroadcastReceiver
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.provider.MediaStore.MediaColumns
-import android.text.TextUtils
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,31 +19,31 @@ import com.hackday.imageSearch.ui.main.MainActivity
 import java.util.*
 
 
-class MLActivity : AppCompatActivity(){
+class MLActivity : AppCompatActivity() {
 
-    private lateinit var viewModel:MLViewModel
+    private lateinit var viewModel: MLViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding : ActivitySplashBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
+        val binding: ActivitySplashBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_splash)
         initBinding(binding)
 
         getPermission()
     }
 
-    private fun initBinding(binding:ActivitySplashBinding){
+    private fun initBinding(binding: ActivitySplashBinding) {
         viewModel = ViewModelProvider(this).get(MLViewModel::class.java)
 
-        with(binding){
-            vm=viewModel
-            lifecycleOwner=this@MLActivity
+        with(binding) {
+            vm = viewModel
+            lifecycleOwner = this@MLActivity
         }
     }
 
-    private fun getPermission()
-    {
-        var permissionListener: PermissionListener = object: PermissionListener {
+    private fun getPermission() {
+        var permissionListener: PermissionListener = object : PermissionListener {
 
             override fun onPermissionGranted() {
                 startLabelWork()
@@ -62,7 +54,7 @@ class MLActivity : AppCompatActivity(){
             }
         }
 
-        TedPermission.with(applicationContext) .setPermissionListener(permissionListener)
+        TedPermission.with(applicationContext).setPermissionListener(permissionListener)
             .setDeniedMessage("권한이 거부되었습니다. 사용을 원하시면 설정에서 해당 권한을 직접 허용해주세요.")
             .setPermissions(Manifest.permission.CAMERA)
             .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -75,7 +67,7 @@ class MLActivity : AppCompatActivity(){
 
         startWorkRequest(workRequest)
 
-        whenProgressIsUpdatedThenDoThis(workRequest.id) { current,total ->
+        whenProgressIsUpdatedThenDoThis(workRequest.id) { current, total ->
             viewModel.setCurrent(current)
             viewModel.setTotal(total)
         }
@@ -88,24 +80,24 @@ class MLActivity : AppCompatActivity(){
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
-    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int,Int) -> Any) {
+    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int, Int) -> Any) {
         getWorkManager()
             .getWorkInfoByIdLiveData(workId)
             .observe(this, Observer { workInfo: WorkInfo? ->
                 workInfo?.let {
-                    onUpdate(it.progress.getInt("current", 0),it.progress.getInt("total",0))
+                    onUpdate(it.progress.getInt("current", 0), it.progress.getInt("total", 0))
                 }
             })
     }
+
     private fun whenProgressIsUpdatedThenDoThis(workId: UUID) {
         getWorkManager()
             .getWorkInfoByIdLiveData(workId)
             .observe(this, Observer { workInfo: WorkInfo? ->
                 workInfo?.let {
-                    if(workInfo.state==WorkInfo.State.SUCCEEDED)
-                    {
+                    if (workInfo.state == WorkInfo.State.SUCCEEDED) {
 
-                        val nextIntent = Intent(this,MainActivity::class.java)
+                        val nextIntent = Intent(this, MainActivity::class.java)
                         startActivity(nextIntent)
                         finish()
                     }

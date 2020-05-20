@@ -16,6 +16,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationBuilderWithBuilderAccessor
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.room.Room
 import androidx.work.*
 import com.google.android.gms.tasks.Task
@@ -25,7 +27,10 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.hackday.imageSearch.database.PhotoInfoDatabase
+import com.hackday.imageSearch.database.model.PhotoTag
 import com.hackday.imageSearch.di.viewModelModule
+import com.hackday.imageSearch.event.PhotoInfoEvent
+import com.hackday.imageSearch.event.PhotoTagEvent
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
@@ -37,7 +42,7 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
 
     private var pathArrayList = ArrayList< Pair<String,String> >()
 
-    val pvm = PhotoInfoViewModel(PhotoInfoRepositoryInjector.getPhotoRepositoryImpl())
+    //val pvm = PhotoInfoViewModel(PhotoInfoRepositoryInjector.getPhotoRepositoryImpl())
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
@@ -135,8 +140,14 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
                 3 -> PhotoInfo(uriAndDate.second, uriAndDate.first, labels[0].text, labels[1].text, labels[2].text)
                 else -> PhotoInfo(uriAndDate.second, uriAndDate.first, null, null, null)
             }.let {
-                pvm.insertPhoto(it)
+                PhotoInfoEvent.addPhotoInfoList(it)
             }
+
+            for (label in labels){
+                val photoTag = PhotoTag(label.text,uriAndDate.first)
+                PhotoTagEvent.addPhotoTagList(photoTag)
+            }
+
             reportProgress(++howManyLabeled,pathArrayList.size)
         }
     }

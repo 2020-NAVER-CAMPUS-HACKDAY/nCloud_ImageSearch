@@ -42,8 +42,6 @@ class MLLabelWorker (private val context: Context, private val workerParams:Work
 
     private var pathArrayList = ArrayList< Pair<String,String> >()
 
-    //val pvm = PhotoInfoViewModel(PhotoInfoRepositoryInjector.getPhotoRepositoryImpl())
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
         try {

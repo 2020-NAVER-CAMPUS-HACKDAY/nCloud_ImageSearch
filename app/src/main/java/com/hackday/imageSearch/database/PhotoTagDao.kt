@@ -10,6 +10,9 @@ interface PhotoTagDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTag(photoTag: PhotoTag?): Completable
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTagList(photoTagList: ArrayList<PhotoTag>?): Completable
+
     @Query("SELECT * FROM phototag")
     fun getAllTag(): Single<List<PhotoTag>>
 

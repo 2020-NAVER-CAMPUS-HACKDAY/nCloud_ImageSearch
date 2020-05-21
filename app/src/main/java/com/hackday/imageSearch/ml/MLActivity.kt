@@ -34,7 +34,6 @@ class MLActivity : AppCompatActivity() {
         initBinding(binding)
 
         getPermission()
-        insertPhotoInfoExecute()
     }
 
     private fun initBinding(binding: ActivitySplashBinding) {
@@ -107,13 +106,6 @@ class MLActivity : AppCompatActivity() {
                     }
                 }
             })
-    }
-
-    private fun insertPhotoInfoExecute(){
-        viewModel.subscribePhotoInfoEvent()
-        viewModel.subscribePhotoTagEvent()
-        viewModel.photoInfoList.observe(this, Observer { viewModel.insertPhotoInfoList(it) })
-        viewModel.photoTagList.observe(this, Observer { viewModel.insertPhotoTagList(it) })
     }
 }
 

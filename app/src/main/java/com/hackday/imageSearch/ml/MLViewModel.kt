@@ -14,18 +14,17 @@ class MLViewModel:ViewModel() {
     private val disposable: CompositeDisposable = CompositeDisposable()
     private val photoInfoRepository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
 
-    val photoInfoList = MutableLiveData<ArrayList<PhotoInfo>>().apply {
-        value = ArrayList()
-    }
-    val photoTagList = MutableLiveData<ArrayList<PhotoTag>>().apply {
-        value = ArrayList()
-    }
-
     private val _current = MutableLiveData<Int>()
     val current:LiveData<Int> =_current
 
     private val _total = MutableLiveData<Int>()
     val total:LiveData<Int> = _total
+
+    init{
+        subscribePhotoInfoEvent()
+        subscribePhotoTagEvent()
+    }
+
     fun setCurrent(current:Int)
     {
         _current.postValue(current)
@@ -35,16 +34,16 @@ class MLViewModel:ViewModel() {
         _total.postValue(total)
     }
 
-    fun insertPhotoInfoList(photoInfoList: ArrayList<PhotoInfo>){
+    fun insertPhotoInfo(photoInfo: PhotoInfo){
         disposable.add(
-            photoInfoRepository.insertPhotoList(photoInfoList)
+            photoInfoRepository.insertPhoto(photoInfo)
                 .subscribe()
         )
     }
 
-    fun insertPhotoTagList(photoTagList: ArrayList<PhotoTag>){
+    fun insertPhotoTag(photoTag: PhotoTag){
         disposable.add(
-            photoInfoRepository.insertTagList(photoTagList)
+            photoInfoRepository.insertTag(photoTag)
                 .subscribe()
         )
     }
@@ -52,8 +51,7 @@ class MLViewModel:ViewModel() {
     fun subscribePhotoInfoEvent(){
         disposable.add(
             PhotoInfoEvent.addPhotoInfoListSubject.subscribe{
-                photoInfoList.value?.add(it)
-                photoInfoList.postValue(photoInfoList.value)
+                insertPhotoInfo(it)
             }
         )
     }
@@ -61,8 +59,7 @@ class MLViewModel:ViewModel() {
     fun subscribePhotoTagEvent(){
         disposable.add(
             PhotoTagEvent.addPhotoTagListSubject.subscribe{
-                photoTagList.value?.add(it)
-                photoTagList.postValue(photoTagList.value)
+                insertPhotoTag(it)
             }
         )
     }

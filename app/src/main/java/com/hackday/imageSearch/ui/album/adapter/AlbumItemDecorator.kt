@@ -16,15 +16,20 @@ class AlbumItemDecorator : RecyclerView.ItemDecoration() {
 
         val horizontalValue = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
+            30f,
+            view.resources.displayMetrics
+        ).toInt()
+
+        val verticalValue = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
             15f,
             view.resources.displayMetrics
         ).toInt()
 
 
-        when (parent.getChildLayoutPosition(view)) {
-            0 -> outRect.set(horizontalValue, 0, horizontalValue, 0)
-            state.itemCount - 1 -> outRect.set(0, 0, horizontalValue, 0)
-            else -> outRect.set(0, 0, horizontalValue, 0)
+        when (parent.getChildLayoutPosition(view) % 2) {
+            0 -> outRect.set(horizontalValue, 0, 0, verticalValue)
+            else -> outRect.set(horizontalValue / 2, 0, horizontalValue, verticalValue)
         }
 
     }

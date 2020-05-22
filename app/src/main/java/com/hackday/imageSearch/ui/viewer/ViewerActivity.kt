@@ -3,6 +3,9 @@ package com.hackday.imageSearch.ui.viewer
 import android.app.AlertDialog
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -17,31 +20,31 @@ import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
 import kotlinx.android.synthetic.main.activity_viewer.*
 import kotlinx.android.synthetic.main.dialog_viewer_infodetail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.zip.Inflater
 
-class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
+class ViewerActivity : AppCompatActivity() {
 
     private lateinit var uri: String
-
-    override val vm: ViewerViewModel by viewModel()
-    override fun getLayoutRes() = R.layout.activity_viewer
-
-    override fun setupBinding() {
-        binding.vm = vm
-    }
+    private lateinit var viewermodel:ViewerViewModel
+    private lateinit var dlg: DetailDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        dlg = DetailDialog(this)
+        val binding: ActivityViewerBinding = DataBindingUtil.setContentView(this, R.layout.activity_viewer)
+        initBinding(binding)
+
         loadImage()
+    }
 
-        vm.getPhotoByUri(uri).observe(this, Observer {
-            vm.vdate = it.date
-            vm.vtag1 = it.tag1.toString()
-            vm.vtag2 = it.tag2.toString()
-            vm.vtag3 = it.tag3.toString()
-            setupBinding()
-        })
+    private fun initBinding(binding:ActivityViewerBinding){
+        viewermodel = ViewModelProvider(this).get(ViewerViewModel::class.java)
 
+        with(binding){
+            vm=viewermodel
+            lifecycleOwner=this@ViewerActivity
+        }
     }
 
     override fun onStart() {
@@ -66,13 +69,16 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
                 .error(R.drawable.ic_launcher_background)
                 .apply(RequestOptions().fitCenter())
                 .into(img_photo_detail)
+
+            viewermodel.getPhotoByUri(uri).observe(this, Observer {
+                viewermodel._vphoto.value = it
+                dlg.start(it)
+            })
         }
     }
 
     fun dialogDetail(){
-        val builder = AlertDialog.Builder(this)
-        val dialogView = layoutInflater.inflate(R.layout.dialog_viewer_infodetail, null)
-        builder.setView(dialogView).create().show()
+        dlg.show()
     }
 
     companion object{

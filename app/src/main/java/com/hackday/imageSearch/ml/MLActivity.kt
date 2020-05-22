@@ -29,7 +29,6 @@ class MLActivity : AppCompatActivity() {
         val binding: ActivitySplashBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_splash)
         initBinding(binding)
-
         getPermission()
     }
 
@@ -47,6 +46,9 @@ class MLActivity : AppCompatActivity() {
 
             override fun onPermissionGranted() {
                 startLabelWork()
+                val nextIntent = Intent(applicationContext, MainActivity::class.java)
+                startActivity(nextIntent)
+                finish()
             }
 
             override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
@@ -80,7 +82,7 @@ class MLActivity : AppCompatActivity() {
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
-    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int, Int) -> Any) {
+    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int, Int) -> Unit) {
         getWorkManager()
             .getWorkInfoByIdLiveData(workId)
             .observe(this, Observer { workInfo: WorkInfo? ->
@@ -96,7 +98,6 @@ class MLActivity : AppCompatActivity() {
             .observe(this, Observer { workInfo: WorkInfo? ->
                 workInfo?.let {
                     if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-
                         val nextIntent = Intent(this, MainActivity::class.java)
                         startActivity(nextIntent)
                         finish()

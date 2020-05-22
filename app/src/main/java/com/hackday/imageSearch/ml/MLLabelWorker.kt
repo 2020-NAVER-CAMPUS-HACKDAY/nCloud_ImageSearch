@@ -132,6 +132,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             val labels = Tasks.await(processTask); //프로세스 이미지를
 
             when (labels.size) {
+                0 -> PhotoInfo(uriAndDate.second, uriAndDate.first, null, null, null)
                 1 -> PhotoInfo(uriAndDate.second, uriAndDate.first, labels[0].text, null, null)
                 2 -> PhotoInfo(
                     uriAndDate.second,
@@ -140,14 +141,13 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                     labels[1].text,
                     null
                 )
-                3 -> PhotoInfo(
+                else -> PhotoInfo(
                     uriAndDate.second,
                     uriAndDate.first,
                     labels[0].text,
                     labels[1].text,
                     labels[2].text
                 )
-                else -> PhotoInfo(uriAndDate.second, uriAndDate.first, null, null, null)
             }.let {
                 pvm.insertPhoto(it)
             }

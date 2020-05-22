@@ -27,7 +27,7 @@ class AlbumRecyclerAdapter : RecyclerView.Adapter<AlbumRecyclerAdapter.Holder>()
             Glide.with(context)
                 .load(photo.thumbnail)
                 .error(R.drawable.ic_launcher_background)
-                .apply(RequestOptions().fitCenter())
+                .apply(RequestOptions().fitCenter().override(IMAGE_SIZE, IMAGE_SIZE))
                 .into(image)
 
             label.text = photo.tag
@@ -68,5 +68,9 @@ class AlbumRecyclerAdapter : RecyclerView.Adapter<AlbumRecyclerAdapter.Holder>()
 
     interface OnItemClickListener {
         fun clickItem(position: Int, label: String)
+    }
+
+    companion object {
+        const val IMAGE_SIZE = 400
     }
 }

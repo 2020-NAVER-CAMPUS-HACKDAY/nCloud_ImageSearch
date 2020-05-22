@@ -27,7 +27,7 @@ class PhotoAdapter(val photoClick: (PhotoInfo?) -> Unit) :
             Glide.with(context)
                 .load(photo?.uri)
                 .error(R.drawable.ic_launcher_background)
-                .apply(RequestOptions().fitCenter())
+                .apply(RequestOptions().fitCenter().override(IMAGE_SIZE, IMAGE_SIZE))
                 .into(image)
 
             date.text = photo?.date
@@ -51,6 +51,8 @@ class PhotoAdapter(val photoClick: (PhotoInfo?) -> Unit) :
     }
 
     companion object {
+        const val IMAGE_SIZE = 400
+
         private val DIFF_CALLBACK = object :
             DiffUtil.ItemCallback<PhotoInfo>() {
             // Concert details may have changed if reloaded from the database,
@@ -66,5 +68,4 @@ class PhotoAdapter(val photoClick: (PhotoInfo?) -> Unit) :
             ) = oldConcert == newConcert
         }
     }
-
 }

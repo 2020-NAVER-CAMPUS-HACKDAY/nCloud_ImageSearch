@@ -1,9 +1,12 @@
 package com.hackday.imageSearch.ml
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -66,14 +69,23 @@ class MLActivity : AppCompatActivity() {
 
     private fun startLabelWork() {
         val workRequest = createWorkRequest()
-
         startWorkRequest(workRequest)
 
         whenProgressIsUpdatedThenDoThis(workRequest.id) { current, total ->
-            viewModel.setCurrent(current)
-            viewModel.setTotal(total)
+            /*viewModel.setCurrent(current)
+            viewModel.setTotal(total)*/
+            val builder = NotificationCompat.Builder(applicationContext, "channelId")
+                .setProgress(total, current, false)
+                .setSmallIcon(androidx.work.R.drawable.notification_tile_bg)
+            val service: NotificationManager =
+                ContextCompat.getSystemService(
+                    applicationContext,
+                    NotificationManager::class.java
+                ) as NotificationManager
+            service.notify(1, builder.build());
         }
-        whenProgressIsUpdatedThenDoThis(workRequest.id)
+
+        //whenProgressIsUpdatedThenDoThis(workRequest.id)
     }
 
     private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>().build()

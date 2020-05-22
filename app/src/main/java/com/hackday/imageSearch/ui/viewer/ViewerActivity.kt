@@ -1,8 +1,11 @@
 package com.hackday.imageSearch.ui.viewer
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -13,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseActivity
+import com.hackday.imageSearch.databinding.ActivityMainBinding
 import com.hackday.imageSearch.databinding.ActivityViewerBinding
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
@@ -24,27 +28,18 @@ import java.util.zip.Inflater
 
 class ViewerActivity : AppCompatActivity() {
 
+    val pvm: PhotoInfoViewModel by viewModel()
+
     private lateinit var uri: String
-    private lateinit var viewermodel:ViewerViewModel
     private lateinit var dlg: DetailDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_viewer)
 
         dlg = DetailDialog(this)
-        val binding: ActivityViewerBinding = DataBindingUtil.setContentView(this, R.layout.activity_viewer)
-        initBinding(binding)
 
         loadImage()
-    }
-
-    private fun initBinding(binding:ActivityViewerBinding){
-        viewermodel = ViewModelProvider(this).get(ViewerViewModel::class.java)
-
-        with(binding){
-            vm=viewermodel
-            lifecycleOwner=this@ViewerActivity
-        }
     }
 
     override fun onStart() {
@@ -57,11 +52,15 @@ class ViewerActivity : AppCompatActivity() {
         btn_detail.setOnClickListener {
             dialogDetail()
         }
+
+        btn_delete.setOnClickListener {
+            deleteAll()
+        }
     }
 
-    fun loadImage(){
+    fun loadImage() {
         // photoFragment 에서 전달되는 id, uri 받기
-        if(intent != null && intent.hasExtra(EXTRA_PHOTO_URI)){
+        if (intent != null && intent.hasExtra(EXTRA_PHOTO_URI)) {
             uri = intent.getStringExtra(EXTRA_PHOTO_URI)!!
 
             Glide.with(this)
@@ -70,18 +69,23 @@ class ViewerActivity : AppCompatActivity() {
                 .apply(RequestOptions().fitCenter())
                 .into(img_photo_detail)
 
-            viewermodel.getPhotoByUri(uri).observe(this, Observer {
-                viewermodel._vphoto.value = it
+            pvm.getPhotoByUri(uri).observe(this, Observer {
                 dlg.start(it)
             })
+
         }
     }
 
-    fun dialogDetail(){
+    fun dialogDetail() {
         dlg.show()
     }
 
-    companion object{
+    fun deleteAll() {
+        pvm.deleteAll()
+        finish()
+    }
+
+    companion object {
         const val EXTRA_PHOTO_DATE = "EXTRA_PHOTO_DATE"
         const val EXTRA_PHOTO_URI = "EXTRA_PHOTO_URI"
         const val EXTRA_PHOTO_TAG1 = "EXTRA_PHOTO_TAG1"

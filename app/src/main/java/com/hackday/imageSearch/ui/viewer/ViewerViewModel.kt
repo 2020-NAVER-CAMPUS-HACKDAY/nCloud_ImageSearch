@@ -16,15 +16,4 @@ import io.reactivex.observers.DisposableSingleObserver
 
 class ViewerViewModel : ViewModel() {
 
-    val _vphoto = MutableLiveData<PhotoInfo>()
-    val vphoto : LiveData<PhotoInfo> = _vphoto
-
-    val photoInfoRepository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
-
-    fun getPhotoByUri(uri : String) = photoInfoRepository.getPhotoByUri(uri)
-
-    fun inputdialog(photo : PhotoInfo){
-        _vphoto.value = photo
-    }
-
 }

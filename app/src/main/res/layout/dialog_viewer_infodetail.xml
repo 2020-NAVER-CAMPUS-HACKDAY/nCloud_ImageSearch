@@ -39,7 +39,8 @@
                 android:id="@+id/d_photo_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{vm.vdate}"
+                android:layout_weight="1"
+                android:text=""
                 />
 
         </LinearLayout>
@@ -63,25 +64,31 @@
 
                 <TextView
                     android:id="@+id/d_photo_tag1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@{vm.vtag1}"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
 
                 <TextView
                     android:id="@+id/d_photo_tag2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@{vm.vtag2}"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
 
                 <TextView
                     android:id="@+id/d_photo_tag3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@{vm.vtag3}"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
 
             </LinearLayout>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="확인"/>
 
     </LinearLayout>
 

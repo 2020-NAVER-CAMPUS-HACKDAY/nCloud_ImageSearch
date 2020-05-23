@@ -8,14 +8,17 @@ import com.hackday.imageSearch.event.PhotoTagEvent
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import io.reactivex.disposables.CompositeDisposable
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 
-class MLViewModel:ViewModel() {
+class MLViewModel : ViewModel() {
 
     private val disposable: CompositeDisposable = CompositeDisposable()
     private val photoInfoRepository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
 
     private val _current = MutableLiveData<Int>()
-    val current:LiveData<Int> =_current
+    val current: LiveData<Int> = _current
 
     private val _total = MutableLiveData<Int>()
     val total:LiveData<Int> = _total
@@ -27,10 +30,12 @@ class MLViewModel:ViewModel() {
 
     fun setCurrent(current:Int)
     {
+    val total: LiveData<Int> = _total
+    fun setCurrent(current: Int) {
         _current.postValue(current)
     }
-    fun setTotal(total:Int)
-    {
+
+    fun setTotal(total: Int) {
         _total.postValue(total)
     }
 

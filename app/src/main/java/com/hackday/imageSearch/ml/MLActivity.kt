@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequestBuilder
@@ -15,8 +16,10 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.databinding.ActivitySplashBinding
+import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.ui.main.MainActivity
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MLActivity : AppCompatActivity() {
@@ -82,7 +85,7 @@ class MLActivity : AppCompatActivity() {
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
-    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int, Int) -> Unit) {
+    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int, Int) -> Any) {
         getWorkManager()
             .getWorkInfoByIdLiveData(workId)
             .observe(this, Observer { workInfo: WorkInfo? ->
@@ -105,6 +108,5 @@ class MLActivity : AppCompatActivity() {
                 }
             })
     }
-
 }
 

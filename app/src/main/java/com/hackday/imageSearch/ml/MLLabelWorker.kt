@@ -10,12 +10,19 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.room.Room
 import androidx.work.*
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.hackday.imageSearch.MyApplication
 import com.hackday.imageSearch.database.PhotoInfoDatabase
+import com.hackday.imageSearch.database.model.PhotoTag
+import com.hackday.imageSearch.di.viewModelModule
+import com.hackday.imageSearch.event.PhotoInfoEvent
+import com.hackday.imageSearch.event.PhotoTagEvent
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
@@ -26,8 +33,6 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
     Worker(context, workerParams) {
 
     private var pathArrayList = ArrayList<Pair<String, String>>()
-
-    val pvm = PhotoInfoViewModel(PhotoInfoRepositoryInjector.getPhotoRepositoryImpl())
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
@@ -149,9 +154,15 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                     labels[2].text
                 )
             }.let {
-                pvm.insertPhoto(it)
+                PhotoInfoEvent.addPhotoInfoList(it)
             }
-            reportProgress(++howManyLabeled, pathArrayList.size)
+
+            for (label in labels){
+                val photoTag = PhotoTag(label.text,uriAndDate.first)
+                PhotoTagEvent.addPhotoTagList(photoTag)
+            }
+
+            reportProgress(++howManyLabeled,pathArrayList.size)
         }
     }
 

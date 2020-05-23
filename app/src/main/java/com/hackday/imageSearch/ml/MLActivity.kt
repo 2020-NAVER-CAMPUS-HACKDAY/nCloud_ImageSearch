@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequestBuilder
@@ -18,8 +19,10 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.databinding.ActivitySplashBinding
+import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.ui.main.MainActivity
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MLActivity : AppCompatActivity() {
@@ -72,20 +75,11 @@ class MLActivity : AppCompatActivity() {
         startWorkRequest(workRequest)
 
         whenProgressIsUpdatedThenDoThis(workRequest.id) { current, total ->
-            /*viewModel.setCurrent(current)
-            viewModel.setTotal(total)*/
-            val builder = NotificationCompat.Builder(applicationContext, "channelId")
-                .setProgress(total, current, false)
-                .setSmallIcon(androidx.work.R.drawable.notification_tile_bg)
-            val service: NotificationManager =
-                ContextCompat.getSystemService(
-                    applicationContext,
-                    NotificationManager::class.java
-                ) as NotificationManager
-            service.notify(1, builder.build());
+            viewModel.setCurrent(current)
+            viewModel.setTotal(total)
         }
 
-        //whenProgressIsUpdatedThenDoThis(workRequest.id)
+        whenProgressIsUpdatedThenDoThis(workRequest.id)
     }
 
     private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>().build()
@@ -94,7 +88,7 @@ class MLActivity : AppCompatActivity() {
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
-    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int, Int) -> Unit) {
+    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int, Int) -> Any) {
         getWorkManager()
             .getWorkInfoByIdLiveData(workId)
             .observe(this, Observer { workInfo: WorkInfo? ->
@@ -117,6 +111,5 @@ class MLActivity : AppCompatActivity() {
                 }
             })
     }
-
 }
 

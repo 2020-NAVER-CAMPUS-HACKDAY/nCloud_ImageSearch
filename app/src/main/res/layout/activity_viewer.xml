@@ -44,6 +44,15 @@
             app:layout_constraintLeft_toRightOf="@id/guide_start"
             app:layout_constraintTop_toTopOf="@id/guide_top" />
 
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="deleteAll"
+            app:layout_constraintRight_toRightOf="@id/guide_end"
+            app:layout_constraintLeft_toLeftOf="@id/guide_start"
+            app:layout_constraintTop_toTopOf="@id/guide_top" />
+
         <ImageButton
             android:id="@+id/btn_detail"
             android:layout_width="wrap_content"

@@ -82,13 +82,20 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getUriCountbyUri(uri: String): Int {
+    override fun getUriCountbyUri(uri: String): Boolean {
         return photoInfoDao.getUriCountbyUri(uri)
     }
 
     override fun insertTag(photoTag: PhotoTag?): Completable {
         return photoTagDao
             .insertTag(photoTag)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun insertTagList(photoTagList: ArrayList<PhotoTag>): Completable {
+        return photoTagDao
+            .insertTagList(photoTagList)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

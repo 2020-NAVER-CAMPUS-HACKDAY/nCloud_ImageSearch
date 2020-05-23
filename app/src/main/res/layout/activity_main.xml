@@ -88,6 +88,7 @@
             app:layout_constraintTop_toBottomOf="@id/btn_back" />
 
         <com.google.android.material.tabs.TabLayout
+            android:background="@color/white"
             android:id="@+id/layout_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

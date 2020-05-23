@@ -2,8 +2,7 @@ package com.hackday.imageSearch.ui.album
 
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseFragment
 import com.hackday.imageSearch.databinding.FragmentAlbumBinding
@@ -24,6 +23,8 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        vm.getTagName()
+        //toast(vm.itemList.value.toString())
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -33,7 +34,7 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
 
     private fun setRecyclerView() {
 
-        val recyclerManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        val recyclerManager = GridLayoutManager(context, 2)
 
         with(layout_recycler_view) {
             adapter = AlbumRecyclerAdapter().apply {

@@ -8,7 +8,6 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.hackday.imageSearch.database.model.PhotoTag
-import com.hackday.imageSearch.event.PhotoInfoEvent
 import com.hackday.imageSearch.ml.MLLabelWorker
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryImpl
@@ -118,14 +117,6 @@ class PhotoInfoViewModel (
         )
     }
 
-    fun subscribePhotoInfoEvent(){
-        disposable.add(
-            PhotoInfoEvent.addPhotoInfoListSubject.subscribe(){
-                photoInfoList.value?.add(it)
-                photoInfoList.postValue(photoInfoList.value)
-            }
-        )
-    }
 
     override fun onCleared() {
         super.onCleared()

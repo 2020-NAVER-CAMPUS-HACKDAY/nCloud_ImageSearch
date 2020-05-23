@@ -86,6 +86,14 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
         return photoInfoDao.getUriCountbyUri(uri)
     }
 
+    override fun insertPhotoNonObserve(photoInfo: PhotoInfo?) {
+        return photoInfoDao.insertPhotoNonObserve(photoInfo)
+    }
+
+    override fun insertTagNonObserve(photoTag: PhotoTag?) {
+        return photoTagDao.insertTagNonObserve(photoTag)
+    }
+
     override fun insertTag(photoTag: PhotoTag?): Completable {
         return photoTagDao
             .insertTag(photoTag)

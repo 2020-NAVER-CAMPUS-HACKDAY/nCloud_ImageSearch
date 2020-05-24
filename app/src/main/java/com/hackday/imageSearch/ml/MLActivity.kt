@@ -6,8 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.databinding.DataBindingUtil
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.gun0912.tedpermission.PermissionListener
@@ -15,6 +17,7 @@ import com.gun0912.tedpermission.TedPermission
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.databinding.ActivitySplashBinding
 import com.hackday.imageSearch.ui.main.MainActivity
+import java.util.*
 
 
 class MLActivity : AppCompatActivity() {
@@ -29,7 +32,6 @@ class MLActivity : AppCompatActivity() {
 
         getPermission()
     }
-
 
     private fun getPermission() {
         var permissionListener: PermissionListener = object : PermissionListener {
@@ -66,8 +68,9 @@ class MLActivity : AppCompatActivity() {
 
     private fun startLabelWork() {
         val workRequest = createWorkRequest()
+        if(!whenProgressIsUpdatedThenDoThis(workRequest.id))
+            startWorkRequest(workRequest)
 
-        startWorkRequest(workRequest)
     }
 
     private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>().build()
@@ -76,5 +79,18 @@ class MLActivity : AppCompatActivity() {
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
+    private fun whenProgressIsUpdatedThenDoThis(workId: UUID): Boolean {
+        var flag=false
+        getWorkManager()
+            .getWorkInfoByIdLiveData(workId)
+            .observe(this, Observer { workInfo: WorkInfo? ->
+                workInfo?.let {
+                    if (workInfo.state == WorkInfo.State.RUNNING) {
+                        flag=true
+                    }
+                }
+            })
+        return flag
+    }
 }
 

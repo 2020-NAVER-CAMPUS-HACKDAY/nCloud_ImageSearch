@@ -47,9 +47,12 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
             .getPhotoByUri(uri)
     }
 
+    override fun getAllPhotoByTag(tag: String): DataSource.Factory<Int, PhotoInfo> {
+        return photoInfoDao.getAllPhotoByTag(tag)
+    }
+
     override fun getPhotoByTag1(tag1: String): Single<List<PhotoInfo>> {
-        return photoInfoDao
-            .getPhotoByTag1(tag1)
+        return photoInfoDao.getPhotoByTag1(tag1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

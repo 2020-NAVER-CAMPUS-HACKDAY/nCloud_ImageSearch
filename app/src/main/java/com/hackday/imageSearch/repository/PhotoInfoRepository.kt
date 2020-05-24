@@ -11,6 +11,7 @@ interface PhotoInfoRepository {
     fun deleteAll(): Completable
     fun delete(photoInfo: PhotoInfo): Completable
     fun getPhotoByUri(uri: String): LiveData<PhotoInfo>
+    fun getAllPhotoByTag(tag: String): DataSource.Factory<Int, PhotoInfo>
     fun getPhotoByTag1(tag1: String): Single<List<PhotoInfo>>
     fun getPhotoByTag2(tag2: String): Single<List<PhotoInfo>>
     fun getPhotoByTag3(tag3: String): Single<List<PhotoInfo>>

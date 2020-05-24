@@ -15,7 +15,7 @@ class MainViewModel : ViewModel() {
     private val _albumPosition = MutableLiveData<Int>()
     val albumPosition: LiveData<Int> get() = _albumPosition
 
-    private val _albumTagName = MutableLiveData<String>()
+    private val _albumTagName = MutableLiveData<String>("")
     val albumTagName: LiveData<String> get() = _albumTagName
 
     private val _back = MutableLiveData<Boolean>(false)

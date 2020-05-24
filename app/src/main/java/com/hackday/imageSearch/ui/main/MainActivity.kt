@@ -38,6 +38,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun observe() {
+        vm.isAlbumSelected.observe(this, Observer {
+            if (it) {
+                //toast("눌렀당!" + vm.albumTagName.value)
+                supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.layout_container, PhotoFragment())
+                    commit()
+                }
+            }
+        })
+
         vm.back.observe(this, Observer {
             if (it) {
                 vm.setIsAlbumSelected(false)
@@ -45,13 +55,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         })
     }
 
-    private fun search(){
+    private fun search() {
         btn_search.setOnClickListener {
             val edtText = edit_search.text.toString()
-            if(edtText != ""){
+            if (edtText != "") {
                 vm.setSearchTagName(edtText)
                 vm.setIsAlbumSelected(true)
-            }else {
+            } else {
                 toast("검색어를 입력하세요.")
             }
         }

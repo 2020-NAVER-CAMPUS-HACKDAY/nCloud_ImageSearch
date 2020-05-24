@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.model.PhotoInfo
 
-class PhotoAdapter(val photoClick: (PhotoInfo?, Int) -> Unit) :
+class PhotoAdapter(val photoClick: (PhotoInfo?) -> Unit) :
     PagedListAdapter<PhotoInfo, PhotoAdapter.Holder>(DIFF_CALLBACK) {
     lateinit var context: Context
 
@@ -22,7 +22,7 @@ class PhotoAdapter(val photoClick: (PhotoInfo?, Int) -> Unit) :
         private val date = itemView.findViewById<TextView>(R.id.txt_date)
         private val image = itemView.findViewById<ImageView>(R.id.img_photo)
 
-        fun bind(photo: PhotoInfo?, pos: Int) {
+        fun bind(photo: PhotoInfo?) {
 
             Glide.with(context)
                 .load(photo?.uri)
@@ -33,7 +33,7 @@ class PhotoAdapter(val photoClick: (PhotoInfo?, Int) -> Unit) :
             date.text = photo?.date
 
             itemView.setOnClickListener {
-                photoClick(photo, pos)
+                photoClick(photo)
             }
         }
 
@@ -47,7 +47,7 @@ class PhotoAdapter(val photoClick: (PhotoInfo?, Int) -> Unit) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val photo: PhotoInfo? = getItem(position)
-        holder.bind(photo, position)
+        holder.bind(photo)
     }
 
     companion object {

@@ -4,7 +4,6 @@ import com.hackday.imageSearch.model.PhotoInfo
 
 interface PhotoClickListener {
     fun photoClicked(
-        photo: PhotoInfo?,
-        pos: Int
+        photo: PhotoInfo?
     )
 }

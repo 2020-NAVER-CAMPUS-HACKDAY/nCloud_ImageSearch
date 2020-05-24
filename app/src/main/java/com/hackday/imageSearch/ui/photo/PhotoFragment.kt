@@ -30,8 +30,8 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), PhotoClickListener {
     private fun setRecyclerView() {
 
         val recyclerManager = GridLayoutManager(context, 4)
-        val photoAdapter = PhotoAdapter { photo, pos ->
-            photoClicked(photo, pos)
+        val photoAdapter = PhotoAdapter { photo ->
+            photoClicked(photo)
         }
         vm.itemList.observe(viewLifecycleOwner, Observer {
             photoAdapter.submitList(it)
@@ -45,10 +45,9 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), PhotoClickListener {
         }
     }
 
-    override fun photoClicked(photo: PhotoInfo?, pos: Int) {
+    override fun photoClicked(photo: PhotoInfo?) {
         val intent = Intent(context, ViewerActivity::class.java)
-//        intent.putExtra(ViewerActivity.EXTRA_PHOTO_URI, photo?.uri)
-//        intent.putExtra(ViewerActivity.EXTRA_PHOTO_URI, photo?.uri)
+        intent.putExtra(ViewerActivity.EXTRA_PHOTO_URI, photo?.uri)
         startActivity(intent)
     }
 

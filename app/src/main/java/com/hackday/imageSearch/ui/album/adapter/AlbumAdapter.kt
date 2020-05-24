@@ -26,7 +26,7 @@ class AlbumAdapter : PagedListAdapter<PhotoTag, AlbumAdapter.Holder>(DIFF_CALLBA
         fun bind(photo: PhotoTag?, position: Int) {
 
             Glide.with(context)
-                .load(photo?.uri) // uri로 수정해야 함
+                .load(photo?.uri)
                 .error(R.drawable.ic_launcher_background)
                 .apply(RequestOptions().fitCenter().override(IMAGE_SIZE, IMAGE_SIZE))
                 .into(image)

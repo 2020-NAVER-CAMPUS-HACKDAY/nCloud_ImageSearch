@@ -41,7 +41,7 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
         })
 
         with(layout_recycler_view) {
-            adapter = AlbumAdapter().apply {
+            adapter = albumAdapter.apply {
                 setOnItemClickListener { position, label ->
                     mvm.setAlbumTagName(position, label)
                     mvm.setIsAlbumSelected(true)

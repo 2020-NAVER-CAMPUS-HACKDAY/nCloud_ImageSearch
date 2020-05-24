@@ -31,17 +31,7 @@ class MLActivity : AppCompatActivity() {
 
         val binding: ActivitySplashBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_splash)
-        initBinding(binding)
         getPermission()
-    }
-
-    private fun initBinding(binding: ActivitySplashBinding) {
-        viewModel = ViewModelProvider(this).get(MLViewModel::class.java)
-
-        with(binding) {
-            vm = viewModel
-            lifecycleOwner = this@MLActivity
-        }
     }
 
     private fun getPermission() {

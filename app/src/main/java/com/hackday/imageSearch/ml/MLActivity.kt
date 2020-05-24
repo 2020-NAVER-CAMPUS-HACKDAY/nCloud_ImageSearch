@@ -31,17 +31,7 @@ class MLActivity : AppCompatActivity() {
 
         val binding: ActivitySplashBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_splash)
-        initBinding(binding)
         getPermission()
-    }
-
-    private fun initBinding(binding: ActivitySplashBinding) {
-        viewModel = ViewModelProvider(this).get(MLViewModel::class.java)
-
-        with(binding) {
-            vm = viewModel
-            lifecycleOwner = this@MLActivity
-        }
     }
 
     private fun getPermission() {
@@ -71,12 +61,6 @@ class MLActivity : AppCompatActivity() {
         val workRequest = createWorkRequest()
 
         startWorkRequest(workRequest)
-
-        whenProgressIsUpdatedThenDoThis(workRequest.id) { current, total ->
-            viewModel.setCurrent(current)
-            viewModel.setTotal(total)
-        }
-        whenProgressIsUpdatedThenDoThis(workRequest.id)
     }
 
     private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>().build()
@@ -85,28 +69,7 @@ class MLActivity : AppCompatActivity() {
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
-    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int, Int) -> Any) {
-        getWorkManager()
-            .getWorkInfoByIdLiveData(workId)
-            .observe(this, Observer { workInfo: WorkInfo? ->
-                workInfo?.let {
-                    onUpdate(it.progress.getInt("current", 0), it.progress.getInt("total", 0))
-                }
-            })
-    }
 
-    private fun whenProgressIsUpdatedThenDoThis(workId: UUID) {
-        getWorkManager()
-            .getWorkInfoByIdLiveData(workId)
-            .observe(this, Observer { workInfo: WorkInfo? ->
-                workInfo?.let {
-                    if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                        val nextIntent = Intent(this, MainActivity::class.java)
-                        startActivity(nextIntent)
-                        finish()
-                    }
-                }
-            })
-    }
+
 }
 

@@ -7,7 +7,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -25,8 +24,6 @@ import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MLLabelWorker(private val context: Context, private val workerParams: WorkerParameters) :
@@ -165,6 +162,11 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             }
 
             for (label in labels) {
+
+                if (labels.size > 3 && label == labels[3]) {
+                    break
+                }
+
                 val photoTag = PhotoTag(label.text, uriAndDate.first)
                 photoInofoRepository.insertTagNonObserve(photoTag)
             }

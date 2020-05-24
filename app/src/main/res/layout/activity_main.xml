@@ -91,6 +91,7 @@
             android:id="@+id/layout_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:visibility="@{vm.isAlbumSelected? View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent" />
 

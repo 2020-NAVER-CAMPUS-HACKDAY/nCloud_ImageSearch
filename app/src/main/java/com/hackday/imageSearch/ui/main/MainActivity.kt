@@ -38,7 +38,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun observe() {
-        vm.isAlbumSelected.observe(this, Observer {
+        vm.replaceFragment.observe(this, Observer {
             if (it) {
                 //toast("눌렀당!" + vm.albumTagName.value)
                 supportFragmentManager.beginTransaction().apply {
@@ -50,7 +50,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         vm.back.observe(this, Observer {
             if (it) {
-                vm.setIsAlbumSelected(false)
+                vm.setReplaceFragment(false)
+                vm.setIsBtnSearchClicked(false)
             }
         })
     }
@@ -59,8 +60,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         btn_search.setOnClickListener {
             val edtText = edit_search.text.toString()
             if (edtText != "") {
+                vm.setReplaceFragment(true)
+                vm.setIsBtnSearchClicked(true)
                 vm.setSearchTagName(edtText)
-                vm.setIsAlbumSelected(true)
             } else {
                 toast("검색어를 입력하세요.")
             }
@@ -68,8 +70,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun onBackPressed() {  // 뒤로가기 눌렀을 때 바로 앱 종료되는 것 막기
-        if (vm.isAlbumSelected.value!!) {
-            vm.setIsAlbumSelected(false)
+        if (vm.replaceFragment.value!!) {
+            vm.setReplaceFragment(false)
+            vm.setIsBtnSearchClicked(false)
         } else {
             super.onBackPressed()
         }

@@ -9,8 +9,8 @@ import io.reactivex.disposables.CompositeDisposable
 
 class MainViewModel : ViewModel() {
 
-    private val _isAlbumSelected = MutableLiveData<Boolean>(false)
-    val isAlbumSelected: LiveData<Boolean> get() = _isAlbumSelected
+    private val _replaceFragment = MutableLiveData<Boolean>(false)
+    val replaceFragment: LiveData<Boolean> get() = _replaceFragment
 
     private val _albumPosition = MutableLiveData<Int>()
     val albumPosition: LiveData<Int> get() = _albumPosition
@@ -19,18 +19,25 @@ class MainViewModel : ViewModel() {
     val albumTagName: LiveData<String> get() = _albumTagName
 
     private val _albumSearchTagName = MutableLiveData<String>("")
-    val albumSearchTagName: LiveData<String> get() = _albumSearchTagName
+    val searchTagName: LiveData<String> get() = _albumSearchTagName
+
+    private val _isBtnSearchClicked = MutableLiveData<Boolean>(false)
+    val isBtnSearchClicked: LiveData<Boolean> get() = _isBtnSearchClicked
 
     private val _back = MutableLiveData<Boolean>(false)
     val back: LiveData<Boolean> get() = _back
 
-    fun setIsAlbumSelected(flag: Boolean) {
-        _isAlbumSelected.value = flag
+    fun setReplaceFragment(flag: Boolean) {
+        _replaceFragment.value = flag
     }
 
     fun setAlbumTagName(position: Int, label: String?) {
         _albumPosition.value = position
         _albumTagName.value = label
+    }
+
+    fun setIsBtnSearchClicked(flag: Boolean) {
+        _isBtnSearchClicked.value = flag
     }
 
     fun setSearchTagName(label: String) {

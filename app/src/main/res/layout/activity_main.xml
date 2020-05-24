@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="@{vm.isAlbumSelected? View.VISIBLE : View.GONE}"
+            android:visibility="@{vm.replaceFragment? View.VISIBLE : View.GONE}"
             app:layout_constraintTop_toBottomOf="@id/btn_back" />
 
 
@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:visibility="@{vm.isAlbumSelected? View.GONE : View.VISIBLE}"
+            android:visibility="@{vm.replaceFragment? View.GONE : View.VISIBLE}"
             app:layout_constraintTop_toBottomOf="@id/btn_back" />
 
         <com.google.android.material.tabs.TabLayout
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:visibility="@{vm.isAlbumSelected? View.GONE:View.VISIBLE}"
+            android:visibility="@{vm.replaceFragment? View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

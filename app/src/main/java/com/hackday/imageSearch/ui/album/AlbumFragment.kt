@@ -44,7 +44,7 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
             adapter = albumAdapter.apply {
                 setOnItemClickListener { position, label ->
                     mvm.setAlbumTagName(position, label)
-                    mvm.setIsAlbumSelected(true)
+                    mvm.setReplaceFragment(true)
                 }
 
             }

@@ -81,9 +81,10 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
         val idColumnName = MediaStore.Images.ImageColumns._ID
         val pathColumnName = MediaStore.Images.ImageColumns.DATA
         val dateColumnName = MediaStore.Images.ImageColumns.DATE_TAKEN
+        val dateAddedColumnName = MediaStore.Images.ImageColumns.DATE_ADDED
 
         val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val projection = arrayOf(idColumnName, pathColumnName, dateColumnName)
+        val projection = arrayOf(idColumnName, pathColumnName, dateColumnName, dateAddedColumnName)
 
         context
             .contentResolver
@@ -97,6 +98,8 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             ?.use {
                 val idColumnIndex = it.getColumnIndexOrThrow(idColumnName)
                 val dateColumnIndex = it.getColumnIndexOrThrow(dateColumnName)
+                val dateAddedColumnIndex = it.getColumnIndexOrThrow(dateAddedColumnName)
+
                 while (it.moveToNext()) {
                     val uri = ContentUris.withAppendedId(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -104,8 +107,10 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                     ).toString()
                     val mills = it.getLong(dateColumnIndex)
                     val date = generateDate(mills, "yyyy-MM-dd")
-                    if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < date) {
-                        MyApplication.prefs.getUrl = date
+                    Log.d("date taken",date)
+                    val dateAdded = it.getLong(dateAddedColumnIndex).toString()
+                    if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < dateAdded) {
+                        MyApplication.prefs.getUrl = dateAdded
                     }
                     PhotoInfoDatabase
                         .getInstance()

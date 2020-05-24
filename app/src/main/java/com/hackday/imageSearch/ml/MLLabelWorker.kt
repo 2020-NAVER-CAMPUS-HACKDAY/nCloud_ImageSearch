@@ -77,7 +77,6 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
         return channelId
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getNoneLabeledList() {
         val idColumnName = MediaStore.Images.ImageColumns._ID
         val pathColumnName = MediaStore.Images.ImageColumns.DATA
@@ -182,12 +181,10 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
         service.notify(1, builder.build());
     }
 
-    private fun generateDate(mills: Long, dateformat: String): String{
+    private fun generateDate(mills: Long, dateformat: String): String {
         val formatter = SimpleDateFormat(dateformat)
         val calendar = Calendar.getInstance()
-        Log.d("calender format",calendar.toString())
         calendar.setTimeInMillis(mills)
-        Log.d("calender format",calendar.toString())
         return formatter.format(calendar.timeInMillis)
     }
 }

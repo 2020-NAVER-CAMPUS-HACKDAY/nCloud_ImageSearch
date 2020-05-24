@@ -27,6 +27,9 @@ import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
 import java.io.IOException
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 
 class MLLabelWorker(private val context: Context, private val workerParams: WorkerParameters) :
@@ -77,10 +80,11 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
         return channelId
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getNoneLabeledList() {
         val idColumnName = MediaStore.Images.ImageColumns._ID
         val pathColumnName = MediaStore.Images.ImageColumns.DATA
-        val dateColumnName = MediaStore.Images.ImageColumns.DATE_ADDED
+        val dateColumnName = MediaStore.Images.ImageColumns.DATE_TAKEN
 
         val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val projection = arrayOf(idColumnName, pathColumnName, dateColumnName)
@@ -102,7 +106,8 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         it.getLong(idColumnIndex)
                     ).toString()
-                    val date = it.getLong(dateColumnIndex).toString()
+                    val mills = it.getLong(dateColumnIndex)
+                    val date = LocalDateTime.ofInstant(Instant.ofEpochMilli(mills), ZoneId.systemDefault()).toString().substring(0,10)
                     if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < date) {
                         MyApplication.prefs.getUrl = date
                     }

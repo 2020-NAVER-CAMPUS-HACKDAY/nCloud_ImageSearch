@@ -54,6 +54,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         })
     }
 
+//    private fun search(){
+//        vm.setSearchTagName(tag)
+//    }
+
     override fun onBackPressed() {  // 뒤로가기 눌렀을 때 바로 앱 종료되는 것 막기
         if (vm.isAlbumSelected.value!!) {
             vm.setIsAlbumSelected(false)

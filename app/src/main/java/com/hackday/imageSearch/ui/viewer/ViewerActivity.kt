@@ -52,10 +52,6 @@ class ViewerActivity : AppCompatActivity() {
         btn_detail.setOnClickListener {
             dialogDetail()
         }
-
-        btn_delete.setOnClickListener {
-            deleteAll()
-        }
     }
 
     fun loadImage() {
@@ -78,11 +74,6 @@ class ViewerActivity : AppCompatActivity() {
 
     fun dialogDetail() {
         dlg.show()
-    }
-
-    fun deleteAll() {
-        pvm.deleteAll()
-        finish()
     }
 
     companion object {

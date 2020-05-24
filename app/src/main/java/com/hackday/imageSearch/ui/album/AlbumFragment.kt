@@ -22,10 +22,6 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
 
     private val mvm by activityViewModels<MainViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setRecyclerView()
@@ -42,8 +38,8 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
 
         with(layout_recycler_view) {
             adapter = albumAdapter.apply {
-                setOnItemClickListener { position, label ->
-                    mvm.setAlbumTagName(position, label)
+                setOnItemClickListener { label ->
+                    mvm.setAlbumTagTitle(label)
                     mvm.setReplaceFragment(true)
                 }
 

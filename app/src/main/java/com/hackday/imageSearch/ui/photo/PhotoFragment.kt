@@ -46,7 +46,7 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), PhotoClickListener {
                 if (mvm.isBtnSearchClicked.value == true) {
                     vm.setAlbumItemList(mvm.searchTagName.value!!)
                 } else {
-                    vm.setAlbumItemList(mvm.albumTagName.value!!)
+                    vm.setAlbumItemList(mvm.albumTagTitle.value!!)
                 }
                 setItemList(photoAdapter, vm.newItemList)
             }

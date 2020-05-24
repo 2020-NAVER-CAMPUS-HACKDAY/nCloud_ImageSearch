@@ -107,7 +107,6 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                     ).toString()
                     val mills = it.getLong(dateColumnIndex)
                     val date = generateDate(mills, "yyyy-MM-dd")
-                    Log.d("date taken",date)
                     val dateAdded = it.getLong(dateAddedColumnIndex).toString()
                     if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < dateAdded) {
                         MyApplication.prefs.getUrl = dateAdded
@@ -188,8 +187,6 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
 
     private fun generateDate(mills: Long, dateformat: String): String {
         val formatter = SimpleDateFormat(dateformat)
-        val calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(mills)
-        return formatter.format(calendar.timeInMillis)
+        return formatter.format(mills)
     }
 }

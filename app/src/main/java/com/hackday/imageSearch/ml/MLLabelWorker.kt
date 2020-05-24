@@ -10,22 +10,19 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.room.Room
-import androidx.work.*
+import androidx.work.ForegroundInfo
+import androidx.work.R
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.hackday.imageSearch.MyApplication
 import com.hackday.imageSearch.database.PhotoInfoDatabase
 import com.hackday.imageSearch.database.model.PhotoTag
-import com.hackday.imageSearch.di.viewModelModule
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
-import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
 import java.io.IOException
 import java.time.Instant
 import java.time.LocalDateTime
@@ -107,7 +104,9 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                         it.getLong(idColumnIndex)
                     ).toString()
                     val mills = it.getLong(dateColumnIndex)
-                    val date = LocalDateTime.ofInstant(Instant.ofEpochMilli(mills), ZoneId.systemDefault()).toString().substring(0,10)
+                    val date =
+                        LocalDateTime.ofInstant(Instant.ofEpochMilli(mills), ZoneId.systemDefault())
+                            .toString().substring(0, 10)
                     if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < date) {
                         MyApplication.prefs.getUrl = date
                     }
@@ -164,12 +163,12 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                 photoInofoRepository.insertPhotoNonObserve(it)
             }
 
-            for (label in labels){
-                val photoTag = PhotoTag(label.text,uriAndDate.first)
+            for (label in labels) {
+                val photoTag = PhotoTag(label.text, uriAndDate.first)
                 photoInofoRepository.insertTagNonObserve(photoTag)
             }
 
-            reportProgress(++howManyLabeled,pathArrayList.size)
+            reportProgress(++howManyLabeled, pathArrayList.size)
         }
     }
 

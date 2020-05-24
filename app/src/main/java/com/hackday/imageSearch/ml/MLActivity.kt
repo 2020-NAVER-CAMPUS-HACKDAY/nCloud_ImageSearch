@@ -1,25 +1,20 @@
 package com.hackday.imageSearch.ml
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.databinding.ActivitySplashBinding
-import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.ui.main.MainActivity
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MLActivity : AppCompatActivity() {
@@ -31,14 +26,26 @@ class MLActivity : AppCompatActivity() {
 
         val binding: ActivitySplashBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_splash)
+
         getPermission()
     }
+
 
     private fun getPermission() {
         var permissionListener: PermissionListener = object : PermissionListener {
 
+            val service: NotificationManager =
+                ContextCompat.getSystemService(
+                    applicationContext,
+                    NotificationManager::class.java
+                ) as NotificationManager
+
+            var notification = service.activeNotifications
+
             override fun onPermissionGranted() {
-                startLabelWork()
+                if (notification.size == 0) {
+                    startLabelWork()
+                }
                 val nextIntent = Intent(applicationContext, MainActivity::class.java)
                 startActivity(nextIntent)
                 finish()
@@ -68,8 +75,6 @@ class MLActivity : AppCompatActivity() {
     private fun startWorkRequest(workRequest: WorkRequest) = getWorkManager().enqueue(workRequest)
 
     private fun getWorkManager() = WorkManager.getInstance(this)
-
-
 
 }
 

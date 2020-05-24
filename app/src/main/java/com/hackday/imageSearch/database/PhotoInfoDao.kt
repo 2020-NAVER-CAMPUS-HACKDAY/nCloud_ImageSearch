@@ -14,6 +14,9 @@ interface PhotoInfoDao {
     fun insertPhoto(photoInfo: PhotoInfo?): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPhotoNonObserve(photoInfo: PhotoInfo?)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotoList(photoInfoList: ArrayList<PhotoInfo>?): Completable
 
     @Query("SELECT * FROM photoinfo")

@@ -10,4 +10,5 @@ interface PhotoTagRepository {
     fun getAllTag(): Single<List<PhotoTag>>
     fun deleteAllTag(): Completable
     fun deleteTag(photoTag: PhotoTag?): Completable
+    fun insertTagNonObserve(photoTag: PhotoTag?)
 }

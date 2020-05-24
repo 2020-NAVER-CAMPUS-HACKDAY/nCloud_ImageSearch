@@ -24,9 +24,9 @@ import com.hackday.imageSearch.database.model.PhotoTag
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import java.io.IOException
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MLLabelWorker(private val context: Context, private val workerParams: WorkerParameters) :
@@ -104,9 +104,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                         it.getLong(idColumnIndex)
                     ).toString()
                     val mills = it.getLong(dateColumnIndex)
-                    val date =
-                        LocalDateTime.ofInstant(Instant.ofEpochMilli(mills), ZoneId.systemDefault())
-                            .toString().substring(0, 10)
+                    val date = generateDate(mills, "yyyy-MM-dd")
                     if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < date) {
                         MyApplication.prefs.getUrl = date
                     }
@@ -184,4 +182,12 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
         service.notify(1, builder.build());
     }
 
+    private fun generateDate(mills: Long, dateformat: String): String{
+        val formatter = SimpleDateFormat(dateformat)
+        val calendar = Calendar.getInstance()
+        Log.d("calender format",calendar.toString())
+        calendar.setTimeInMillis(mills)
+        Log.d("calender format",calendar.toString())
+        return formatter.format(calendar.timeInMillis)
+    }
 }

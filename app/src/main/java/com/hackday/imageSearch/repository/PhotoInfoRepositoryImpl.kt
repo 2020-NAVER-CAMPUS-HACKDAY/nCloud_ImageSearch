@@ -71,6 +71,10 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    override fun getPhotoByTag(tag: String): DataSource.Factory<Int, PhotoInfo> {
+        return photoInfoDao.getPhotoByTag(tag)
+    }
+
     override fun insertPhoto(photoInfo: PhotoInfo): Completable {
         return photoInfoDao
             .insertPhoto(photoInfo)

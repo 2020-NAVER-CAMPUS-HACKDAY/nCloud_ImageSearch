@@ -1,8 +1,14 @@
 package com.hackday.imageSearch.ui.viewer
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseActivity
+import com.hackday.imageSearch.databinding.ActivityMainBinding
 import com.hackday.imageSearch.databinding.ActivityViewerBinding
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
@@ -17,31 +24,22 @@ import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
 import kotlinx.android.synthetic.main.activity_viewer.*
 import kotlinx.android.synthetic.main.dialog_viewer_infodetail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.zip.Inflater
 
-class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
+class ViewerActivity : AppCompatActivity() {
+
+    val pvm: PhotoInfoViewModel by viewModel()
 
     private lateinit var uri: String
-
-    override val vm: ViewerViewModel by viewModel()
-    override fun getLayoutRes() = R.layout.activity_viewer
-
-    override fun setupBinding() {
-        binding.vm = vm
-    }
+    private lateinit var dlg: DetailDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_viewer)
+
+        dlg = DetailDialog(this)
 
         loadImage()
-
-        vm.getPhotoByUri(uri).observe(this, Observer {
-            vm.vdate = it.date
-            vm.vtag1 = it.tag1.toString()
-            vm.vtag2 = it.tag2.toString()
-            vm.vtag3 = it.tag3.toString()
-            setupBinding()
-        })
-
     }
 
     override fun onStart() {
@@ -56,9 +54,9 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
         }
     }
 
-    fun loadImage(){
+    fun loadImage() {
         // photoFragment 에서 전달되는 id, uri 받기
-        if(intent != null && intent.hasExtra(EXTRA_PHOTO_URI)){
+        if (intent != null && intent.hasExtra(EXTRA_PHOTO_URI)) {
             uri = intent.getStringExtra(EXTRA_PHOTO_URI)!!
 
             Glide.with(this)
@@ -66,16 +64,19 @@ class ViewerActivity : BaseActivity<ActivityViewerBinding>() {
                 .error(R.drawable.ic_launcher_background)
                 .apply(RequestOptions().fitCenter())
                 .into(img_photo_detail)
+
+            pvm.getPhotoByUri(uri).observe(this, Observer {
+                dlg.start(it)
+            })
+
         }
     }
 
-    fun dialogDetail(){
-        val builder = AlertDialog.Builder(this)
-        val dialogView = layoutInflater.inflate(R.layout.dialog_viewer_infodetail, null)
-        builder.setView(dialogView).create().show()
+    fun dialogDetail() {
+        dlg.show()
     }
 
-    companion object{
+    companion object {
         const val EXTRA_PHOTO_DATE = "EXTRA_PHOTO_DATE"
         const val EXTRA_PHOTO_URI = "EXTRA_PHOTO_URI"
         const val EXTRA_PHOTO_TAG1 = "EXTRA_PHOTO_TAG1"

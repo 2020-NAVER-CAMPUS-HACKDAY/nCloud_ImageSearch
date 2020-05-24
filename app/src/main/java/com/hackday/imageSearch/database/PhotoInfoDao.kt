@@ -14,6 +14,9 @@ interface PhotoInfoDao {
     fun insertPhoto(photoInfo: PhotoInfo?): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPhotoNonObserve(photoInfo: PhotoInfo?)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotoList(photoInfoList: ArrayList<PhotoInfo>?): Completable
 
     @Query("SELECT * FROM photoinfo")
@@ -38,5 +41,5 @@ interface PhotoInfoDao {
     fun getPhotoByTag3(tag3: String): Single<List<PhotoInfo>>
 
     @Query("SELECT COUNT(uri) from photoinfo WHERE uri= :uri")
-    fun getUriCountbyUri(uri: String): Int
+    fun getUriCountbyUri(uri: String): Boolean
 }

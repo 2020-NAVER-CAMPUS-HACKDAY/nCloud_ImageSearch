@@ -7,19 +7,29 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.room.Room
 import androidx.work.*
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.hackday.imageSearch.MyApplication
 import com.hackday.imageSearch.database.PhotoInfoDatabase
+import com.hackday.imageSearch.database.model.PhotoTag
+import com.hackday.imageSearch.di.viewModelModule
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
 import java.io.IOException
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 
 class MLLabelWorker(private val context: Context, private val workerParams: WorkerParameters) :
@@ -27,7 +37,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
 
     private var pathArrayList = ArrayList<Pair<String, String>>()
 
-    val pvm = PhotoInfoViewModel(PhotoInfoRepositoryInjector.getPhotoRepositoryImpl())
+    private val photoInofoRepository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
@@ -70,10 +80,11 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
         return channelId
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getNoneLabeledList() {
         val idColumnName = MediaStore.Images.ImageColumns._ID
         val pathColumnName = MediaStore.Images.ImageColumns.DATA
-        val dateColumnName = MediaStore.Images.ImageColumns.DATE_ADDED
+        val dateColumnName = MediaStore.Images.ImageColumns.DATE_TAKEN
 
         val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val projection = arrayOf(idColumnName, pathColumnName, dateColumnName)
@@ -95,7 +106,8 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         it.getLong(idColumnIndex)
                     ).toString()
-                    val date = it.getLong(dateColumnIndex).toString()
+                    val mills = it.getLong(dateColumnIndex)
+                    val date = LocalDateTime.ofInstant(Instant.ofEpochMilli(mills), ZoneId.systemDefault()).toString().substring(0,10)
                     if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < date) {
                         MyApplication.prefs.getUrl = date
                     }
@@ -103,7 +115,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                         .getInstance()
                         .photoInfoDao()
                         .getUriCountbyUri(uri)
-                        .takeIf { count -> count == 0 }?.let {
+                        .takeIf { count -> count == false }?.let {
                             val uriAndDate = Pair(uri, date)
                             pathArrayList.add(
                                 uriAndDate
@@ -149,18 +161,28 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                     labels[2].text
                 )
             }.let {
-                pvm.insertPhoto(it)
+                photoInofoRepository.insertPhotoNonObserve(it)
             }
-            reportProgress(++howManyLabeled, pathArrayList.size)
+
+            for (label in labels){
+                val photoTag = PhotoTag(label.text,uriAndDate.first)
+                photoInofoRepository.insertTagNonObserve(photoTag)
+            }
+
+            reportProgress(++howManyLabeled,pathArrayList.size)
         }
     }
 
     private fun reportProgress(current: Int, total: Int) {
-        val newData = Data.Builder()
-            .putInt("current", current)
-            .putInt("total", total)
-            .build()
-        setProgressAsync(newData)
+        val builder = NotificationCompat.Builder(applicationContext, "channelId")
+            .setProgress(total, current, false)
+            .setSmallIcon(androidx.work.R.drawable.notification_tile_bg)
+        val service: NotificationManager =
+            getSystemService(
+                applicationContext,
+                NotificationManager::class.java
+            ) as NotificationManager
+        service.notify(1, builder.build());
     }
 
 }

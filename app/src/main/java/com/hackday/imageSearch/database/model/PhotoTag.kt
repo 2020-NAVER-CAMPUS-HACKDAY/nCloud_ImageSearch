@@ -8,5 +8,7 @@ import androidx.room.PrimaryKey
 data class PhotoTag(
     @PrimaryKey
     @ColumnInfo(name="tag")
-    var tag: String
+    var tag: String,
+    @ColumnInfo(name="uri")
+    var uri: String
 )

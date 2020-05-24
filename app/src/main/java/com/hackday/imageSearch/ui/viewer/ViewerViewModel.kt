@@ -1,6 +1,7 @@
 package com.hackday.imageSearch.ui.viewer
 
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -14,16 +15,5 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 
 class ViewerViewModel : ViewModel() {
-
-    var vdate : String = ""
-    var vtag1 : String = ""
-    var vtag2 : String = ""
-    var vtag3 : String = ""
-
-    val photoInfoRepository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
-
-    fun getPhotoByUri(uri: String): LiveData<PhotoInfo>{
-        return photoInfoRepository.getPhotoByUri(uri)
-    }
 
 }

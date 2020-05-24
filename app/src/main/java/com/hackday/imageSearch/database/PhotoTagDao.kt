@@ -10,6 +10,12 @@ interface PhotoTagDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTag(photoTag: PhotoTag?): Completable
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTagNonObserve(photoTag: PhotoTag?)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTagList(photoTagList: ArrayList<PhotoTag>?): Completable
+
     @Query("SELECT * FROM phototag")
     fun getAllTag(): DataSource.Factory<Int, PhotoTag>
 

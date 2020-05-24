@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.OneTimeWorkRequestBuilder
@@ -15,8 +16,10 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.databinding.ActivitySplashBinding
+import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.ui.main.MainActivity
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MLActivity : AppCompatActivity() {
@@ -28,17 +31,7 @@ class MLActivity : AppCompatActivity() {
 
         val binding: ActivitySplashBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_splash)
-        initBinding(binding)
         getPermission()
-    }
-
-    private fun initBinding(binding: ActivitySplashBinding) {
-        viewModel = ViewModelProvider(this).get(MLViewModel::class.java)
-
-        with(binding) {
-            vm = viewModel
-            lifecycleOwner = this@MLActivity
-        }
     }
 
     private fun getPermission() {
@@ -68,12 +61,6 @@ class MLActivity : AppCompatActivity() {
         val workRequest = createWorkRequest()
 
         startWorkRequest(workRequest)
-
-        whenProgressIsUpdatedThenDoThis(workRequest.id) { current, total ->
-            viewModel.setCurrent(current)
-            viewModel.setTotal(total)
-        }
-        whenProgressIsUpdatedThenDoThis(workRequest.id)
     }
 
     private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>().build()
@@ -82,29 +69,7 @@ class MLActivity : AppCompatActivity() {
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
-    private fun whenProgressIsUpdatedThenDoThis(workId: UUID, onUpdate: (Int, Int) -> Unit) {
-        getWorkManager()
-            .getWorkInfoByIdLiveData(workId)
-            .observe(this, Observer { workInfo: WorkInfo? ->
-                workInfo?.let {
-                    onUpdate(it.progress.getInt("current", 0), it.progress.getInt("total", 0))
-                }
-            })
-    }
 
-    private fun whenProgressIsUpdatedThenDoThis(workId: UUID) {
-        getWorkManager()
-            .getWorkInfoByIdLiveData(workId)
-            .observe(this, Observer { workInfo: WorkInfo? ->
-                workInfo?.let {
-                    if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                        val nextIntent = Intent(this, MainActivity::class.java)
-                        startActivity(nextIntent)
-                        finish()
-                    }
-                }
-            })
-    }
 
 }
 

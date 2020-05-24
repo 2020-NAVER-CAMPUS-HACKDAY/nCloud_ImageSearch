@@ -14,6 +14,7 @@ interface PhotoInfoRepository {
     fun getPhotoByTag1(tag1: String): Single<List<PhotoInfo>>
     fun getPhotoByTag2(tag2: String): Single<List<PhotoInfo>>
     fun getPhotoByTag3(tag3: String): Single<List<PhotoInfo>>
+    fun getPhotoByTag(tag: String): DataSource.Factory<Int, PhotoInfo>
     fun insertPhoto(photoInfo: PhotoInfo): Completable
     fun insertPhotoList(photoInfoList: ArrayList<PhotoInfo>): Completable
     fun getUriCountbyUri(uri: String): Boolean

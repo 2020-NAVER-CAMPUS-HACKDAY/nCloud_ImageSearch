@@ -25,7 +25,7 @@ class MainViewModel : ViewModel() {
         _isAlbumSelected.value = flag
     }
 
-    fun setAlbumTagName(position: Int, label: String) {
+    fun setAlbumTagName(position: Int, label: String?) {
         _albumPosition.value = position
         _albumTagName.value = label
     }

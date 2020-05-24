@@ -7,8 +7,10 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -167,11 +169,15 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
     }
 
     private fun reportProgress(current: Int, total: Int) {
-        val newData = Data.Builder()
-            .putInt("current", current)
-            .putInt("total", total)
-            .build()
-        setProgressAsync(newData)
+        val builder = NotificationCompat.Builder(applicationContext, "channelId")
+            .setProgress(total, current, false)
+            .setSmallIcon(androidx.work.R.drawable.notification_tile_bg)
+        val service: NotificationManager =
+            getSystemService(
+                applicationContext,
+                NotificationManager::class.java
+            ) as NotificationManager
+        service.notify(1, builder.build());
     }
 
 }

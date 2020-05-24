@@ -2,12 +2,13 @@ package com.hackday.imageSearch.ui.album
 
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseFragment
 import com.hackday.imageSearch.databinding.FragmentAlbumBinding
+import com.hackday.imageSearch.ui.album.adapter.AlbumAdapter
 import com.hackday.imageSearch.ui.album.adapter.AlbumItemDecorator
-import com.hackday.imageSearch.ui.album.adapter.AlbumRecyclerAdapter
 import com.hackday.imageSearch.ui.main.MainViewModel
 import kotlinx.android.synthetic.main.fragment_album.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,9 +34,14 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
     private fun setRecyclerView() {
 
         val recyclerManager = GridLayoutManager(context, 2)
+        val albumAdapter = AlbumAdapter()
+
+        vm.albumTitleList.observe(viewLifecycleOwner, Observer {
+            albumAdapter.submitList(it)
+        })
 
         with(layout_recycler_view) {
-            adapter = AlbumRecyclerAdapter().apply {
+            adapter = albumAdapter.apply {
                 setOnItemClickListener { position, label ->
                     mvm.setAlbumTagName(position, label)
                     mvm.setIsAlbumSelected(true)

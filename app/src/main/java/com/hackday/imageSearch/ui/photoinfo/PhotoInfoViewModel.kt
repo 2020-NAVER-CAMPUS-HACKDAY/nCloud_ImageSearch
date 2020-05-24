@@ -96,12 +96,12 @@ class PhotoInfoViewModel (
         )
     }
 
-    fun getAlltag(){
-        disposable.add(
-            photoInfoRepository.getAllTag()
-                .subscribe()
-        )
-    }
+//    fun getAlltag(){
+//        disposable.add(
+//            photoInfoRepository.getAllTag()
+//                .subscribe()
+//        )
+//    }
 
     fun deleteAllTag(){
         disposable.add(

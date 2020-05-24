@@ -1,9 +1,9 @@
 package com.hackday.imageSearch.database
 
+import androidx.paging.DataSource
 import androidx.room.*
 import com.hackday.imageSearch.database.model.PhotoTag
 import io.reactivex.Completable
-import io.reactivex.Single
 
 @Dao
 interface PhotoTagDao {
@@ -17,7 +17,8 @@ interface PhotoTagDao {
     fun insertTagList(photoTagList: ArrayList<PhotoTag>?): Completable
 
     @Query("SELECT * FROM phototag")
-    fun getAllTag(): Single<List<PhotoTag>>
+    fun getAllTag(): DataSource.Factory<Int, PhotoTag>
+
 
     @Query("DELETE FROM phototag")
     fun deleteAllTag(): Completable

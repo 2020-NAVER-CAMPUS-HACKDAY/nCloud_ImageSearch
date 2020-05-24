@@ -112,11 +112,8 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getAllTag(): Single<List<PhotoTag>> {
-        return photoTagDao
-            .getAllTag()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+    override fun getAllTag(): DataSource.Factory<Int, PhotoTag> {
+        return photoTagDao.getAllTag()
     }
 
     override fun deleteAllTag(): Completable {

@@ -12,7 +12,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { MainViewModel() }
     viewModel { PhotoViewModel(get()) }
-    viewModel { AlbumViewModel() }
+    viewModel { AlbumViewModel(get()) }
     viewModel { ViewerViewModel() }
     viewModel { PhotoInfoViewModel(PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()) }
 }

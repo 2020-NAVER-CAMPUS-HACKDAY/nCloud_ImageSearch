@@ -24,9 +24,9 @@ import com.hackday.imageSearch.database.model.PhotoTag
 import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import java.io.IOException
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MLLabelWorker(private val context: Context, private val workerParams: WorkerParameters) :
@@ -77,14 +77,14 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
         return channelId
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getNoneLabeledList() {
         val idColumnName = MediaStore.Images.ImageColumns._ID
         val pathColumnName = MediaStore.Images.ImageColumns.DATA
         val dateColumnName = MediaStore.Images.ImageColumns.DATE_TAKEN
+        val dateAddedColumnName = MediaStore.Images.ImageColumns.DATE_ADDED
 
         val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val projection = arrayOf(idColumnName, pathColumnName, dateColumnName)
+        val projection = arrayOf(idColumnName, pathColumnName, dateColumnName, dateAddedColumnName)
 
         context
             .contentResolver
@@ -98,17 +98,18 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             ?.use {
                 val idColumnIndex = it.getColumnIndexOrThrow(idColumnName)
                 val dateColumnIndex = it.getColumnIndexOrThrow(dateColumnName)
+                val dateAddedColumnIndex = it.getColumnIndexOrThrow(dateAddedColumnName)
+
                 while (it.moveToNext()) {
                     val uri = ContentUris.withAppendedId(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         it.getLong(idColumnIndex)
                     ).toString()
                     val mills = it.getLong(dateColumnIndex)
-                    val date =
-                        LocalDateTime.ofInstant(Instant.ofEpochMilli(mills), ZoneId.systemDefault())
-                            .toString().substring(0, 10)
-                    if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < date) {
-                        MyApplication.prefs.getUrl = date
+                    val date = generateDate(mills, "yyyy-MM-dd")
+                    val dateAdded = it.getLong(dateAddedColumnIndex).toString()
+                    if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < dateAdded) {
+                        MyApplication.prefs.getUrl = dateAdded
                     }
                     PhotoInfoDatabase
                         .getInstance()
@@ -184,4 +185,8 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
         service.notify(1, builder.build());
     }
 
+    private fun generateDate(mills: Long, dateformat: String): String {
+        val formatter = SimpleDateFormat(dateformat)
+        return formatter.format(mills)
+    }
 }

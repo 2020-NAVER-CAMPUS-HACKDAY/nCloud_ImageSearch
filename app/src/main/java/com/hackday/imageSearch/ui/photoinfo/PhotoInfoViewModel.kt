@@ -49,13 +49,13 @@ class PhotoInfoViewModel (
     fun getPhotoByUri(uri: String): LiveData<PhotoInfo> {
         return photoInfoRepository.getPhotoByUri(uri)
     }
-
-    fun getPhotoByTag1(tag1: String){
-        disposable.add(
-            photoInfoRepository.getPhotoByTag1(tag1)
-                .subscribe()
-        )
-    }
+//
+//    fun getPhotoByTag1(tag1: String){
+//        disposable.add(
+//            photoInfoRepository.getPhotoByTag1(tag1)
+//                .subscribe()
+//        )
+//    }
 
     fun getPhotoByTag2(tag2: String){
         disposable.add(
@@ -96,12 +96,12 @@ class PhotoInfoViewModel (
         )
     }
 
-    fun getAlltag(){
-        disposable.add(
-            photoInfoRepository.getAllTag()
-                .subscribe()
-        )
-    }
+//    fun getAlltag(){
+//        disposable.add(
+//            photoInfoRepository.getAllTag()
+//                .subscribe()
+//        )
+//    }
 
     fun deleteAllTag(){
         disposable.add(

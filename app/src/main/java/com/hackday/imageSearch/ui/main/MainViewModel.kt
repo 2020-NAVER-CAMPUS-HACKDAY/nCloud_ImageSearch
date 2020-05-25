@@ -15,8 +15,11 @@ class MainViewModel : ViewModel() {
     private val _albumPosition = MutableLiveData<Int>()
     val albumPosition: LiveData<Int> get() = _albumPosition
 
-    private val _albumTagName = MutableLiveData<String>()
+    private val _albumTagName = MutableLiveData<String>("")
     val albumTagName: LiveData<String> get() = _albumTagName
+
+    private val _albumSearchTagName = MutableLiveData<String>("")
+    val albumSearchTagName: LiveData<String> get() = _albumSearchTagName
 
     private val _back = MutableLiveData<Boolean>(false)
     val back: LiveData<Boolean> get() = _back
@@ -25,9 +28,13 @@ class MainViewModel : ViewModel() {
         _isAlbumSelected.value = flag
     }
 
-    fun setAlbumTagName(position: Int, label: String) {
+    fun setAlbumTagName(position: Int, label: String?) {
         _albumPosition.value = position
         _albumTagName.value = label
+    }
+
+    fun setSearchTagName(label: String) {
+        _albumSearchTagName.value = label
     }
 
     fun setBack() {

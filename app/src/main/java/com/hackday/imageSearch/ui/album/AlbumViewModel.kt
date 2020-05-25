@@ -1,17 +1,15 @@
 package com.hackday.imageSearch.ui.album
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
+import androidx.paging.toLiveData
+import com.hackday.imageSearch.database.model.PhotoTag
+import com.hackday.imageSearch.repository.PhotoTagRepository
 
-class AlbumViewModel : ViewModel() {
+class AlbumViewModel(repository: PhotoTagRepository) : ViewModel() {
 
-    // 임시
-    private val default = listOf<TagModel>(
-        TagModel("image", "장소"),
-        TagModel("image", "동물")
-    )
+    val albumTitleList: LiveData<PagedList<PhotoTag>> =
+        repository.getAllTag().toLiveData(pageSize = 50)
 
-    private val _itemList = MutableLiveData<List<TagModel>>(default)
-    val itemList: LiveData<List<TagModel>> get() = _itemList
 }

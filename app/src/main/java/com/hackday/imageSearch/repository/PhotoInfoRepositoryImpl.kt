@@ -16,12 +16,12 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
     private val photoTagDao = PhotoInfoDatabase.getInstance()
         .photoTagDao()
 
-    companion object{
+    companion object {
         @Volatile
         private var INSTANCE: PhotoInfoRepositoryImpl? = null
 
         fun getInstance() =
-            INSTANCE ?: synchronized(this){
+            INSTANCE ?: synchronized(this) {
                 INSTANCE ?: PhotoInfoRepositoryImpl().also { INSTANCE = it }
             }
     }
@@ -69,10 +69,6 @@ class PhotoInfoRepositoryImpl : PhotoInfoRepository, PhotoTagRepository {
             .getPhotoByTag3(tag3)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    override fun getPhotoByTag(tag: String): DataSource.Factory<Int, PhotoInfo> {
-        return photoInfoDao.getPhotoByTag(tag)
     }
 
     override fun insertPhoto(photoInfo: PhotoInfo): Completable {

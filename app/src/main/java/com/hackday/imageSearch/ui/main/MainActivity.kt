@@ -25,7 +25,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         setViewPager()
         observe()
-        search()
+        initSearchView()
     }
 
     private fun setViewPager() {
@@ -56,7 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         })
     }
 
-    private fun search() {
+    private fun initSearchView() {
         btn_search.setOnClickListener {
             val edtText = edit_search.text.toString()
             if (edtText != "") {

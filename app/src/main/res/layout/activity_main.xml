@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="20dp" />
+            app:layout_constraintGuide_end="391dp" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_end"
@@ -40,34 +40,45 @@
             app:layout_constraintGuide_end="20dp" />
 
 
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> vm.setBack()}"
-            android:text="뒤"
+        <LinearLayout
+            android:id="@+id/layout_mainSearch"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:padding="15dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/round_border_rect"
             app:layout_constraintStart_toStartOf="@id/guide_start"
-            app:layout_constraintTop_toTopOf="@id/guide_top" />
+            app:layout_constraintEnd_toStartOf="@id/guide_end"
+            app:layout_constraintTop_toBottomOf="@id/guide_top">
 
-        <EditText
-            android:id="@+id/edit_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="검색"
-            android:singleLine="true"
-            app:layout_constraintBaseline_toBaselineOf="@id/btn_search"
-            app:layout_constraintEnd_toStartOf="@id/btn_search"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toEndOf="@id/btn_back"
-            app:layout_constraintTop_toTopOf="@id/guide_top" />
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.setBack()}"
+                android:text="뒤"
+                android:src="@drawable/ic_chevron_left_black_35dp"
+                android:background="@android:color/transparent" />
 
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="검색"
-            app:layout_constraintEnd_toEndOf="@id/guide_end"
-            app:layout_constraintTop_toTopOf="@id/guide_top" />
+            <EditText
+                android:id="@+id/edit_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="검색"
+                android:singleLine="true"
+                android:background="@android:color/transparent"/>
+
+            <ImageButton
+                android:id="@+id/btn_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="검색"
+                android:src="@drawable/ic_search_black_30dp"
+                android:background="@android:color/transparent"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_container"
@@ -75,8 +86,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="@{vm.replaceFragment? View.VISIBLE : View.GONE}"
-            app:layout_constraintTop_toBottomOf="@id/btn_back" />
-
+            app:layout_constraintTop_toBottomOf="@id/layout_mainSearch" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/layout_viewPager"
@@ -84,7 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:visibility="@{vm.replaceFragment? View.GONE : View.VISIBLE}"
-            app:layout_constraintTop_toBottomOf="@id/btn_back" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_mainSearch" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/layout_tab_layout"

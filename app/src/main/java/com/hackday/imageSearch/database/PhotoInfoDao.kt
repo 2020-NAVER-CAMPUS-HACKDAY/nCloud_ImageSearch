@@ -18,7 +18,7 @@ interface PhotoInfoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotoList(photoInfoList: ArrayList<PhotoInfo>?): Completable
 
-    @Query("SELECT * FROM photoinfo")
+    @Query("SELECT * FROM photoinfo ORDER BY date desc")
     fun getAll(): DataSource.Factory<Int, PhotoInfo>
 
     @Query("DELETE FROM photoinfo")
@@ -30,7 +30,7 @@ interface PhotoInfoDao {
     @Query("SELECT * FROM photoinfo WHERE uri= :uri")
     fun getPhotoByUri(uri: String): LiveData<PhotoInfo>
 
-    @Query("SELECT * FROM photoinfo WHERE :tag in (tag1, tag2, tag3)")
+    @Query("SELECT * FROM photoinfo WHERE :tag in (tag1, tag2, tag3) ORDER BY date desc")
     fun getAllPhotoByTag(tag: String): DataSource.Factory<Int, PhotoInfo>
 
     @Query("SELECT * FROM photoinfo WHERE tag1= :tag1")

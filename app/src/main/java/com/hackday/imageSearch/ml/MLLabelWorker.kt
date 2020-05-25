@@ -43,7 +43,6 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             e.printStackTrace()
             return Result.failure()
         }
-
         return Result.success()
     }
 
@@ -88,7 +87,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             .query(
                 uri,
                 projection,
-                MyApplication.prefs.lastImageAddedDate,
+                MyApplication.prefsLabel.lastImageAddedDate,
                 null,
                 MediaStore.MediaColumns.DATE_ADDED + " desc"
             )
@@ -105,8 +104,8 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                     val mills = it.getLong(dateColumnIndex)
                     val date = generateDate(mills, "yyyy-MM-dd")
                     val dateAdded = it.getLong(dateAddedColumnIndex).toString()
-                    if (MyApplication.prefs.lastImageAddedDate == null || MyApplication.prefs.lastImageAddedDate.toString() < dateAdded) {
-                        MyApplication.prefs.lastImageAddedDate = dateAdded
+                    if (MyApplication.prefsLabel.lastImageAddedDate == null || MyApplication.prefsLabel.lastImageAddedDate.toString() < dateAdded) {
+                        MyApplication.prefsLabel.lastImageAddedDate = dateAdded
                     }
                     PhotoInfoDatabase
                         .getInstance()
@@ -177,6 +176,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
 
     private fun reportProgress(current: Int, total: Int) {
 
+        Log.e("진행상황", current.toString() + " " + total.toString())
         val builder = NotificationCompat.Builder(applicationContext, "channelId")
             .setProgress(total, current, false)
             .setSmallIcon(androidx.work.R.drawable.notification_tile_bg)
@@ -187,10 +187,6 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             ) as NotificationManager
         service.notify(1, builder.build());
 
-        if(current==total)
-        {
-            service.cancelAll()
-        }
     }
 
     private fun generateDate(mills: Long, dateformat: String): String {

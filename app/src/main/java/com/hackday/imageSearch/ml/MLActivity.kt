@@ -5,20 +5,25 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
+import com.hackday.imageSearch.MyApplication
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.databinding.ActivitySplashBinding
 import com.hackday.imageSearch.ui.main.MainActivity
+import java.util.*
 
 
 class MLActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MLViewModel
 
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,8 +31,10 @@ class MLActivity : AppCompatActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_splash)
 
         getPermission()
+        //observeWorkEnded()
     }
 
+    @ExperimentalStdlibApi
     private fun getPermission() {
         var permissionListener: PermissionListener = object : PermissionListener {
 
@@ -51,25 +58,37 @@ class MLActivity : AppCompatActivity() {
             .check()
     }
 
+    @ExperimentalStdlibApi
     private fun startLabelWork() {
 
-        if (isRunningWorker()) {
-            val workRequest = createWorkRequest()
+        val workRequest = createWorkRequest()
+        if (MyApplication.prefsUID.lastUID == null) {
+            MyApplication.prefsUID.lastUID = workRequest.id.toString()
             startWorkRequest(workRequest)
         }
+        workerEnded(UUID.fromString(MyApplication.prefsUID.lastUID))
+
     }
 
     private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>()
-        .addTag("initWork")
         .build()
 
     private fun startWorkRequest(workRequest: WorkRequest) = getWorkManager().enqueue(workRequest)
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
-    private fun isRunningWorker() = getWorkManager().getWorkInfosByTag("initWork").get().isEmpty()
-
-
+    private fun workerEnded(workId: UUID) {
+        getWorkManager()
+            .getWorkInfoByIdLiveData(workId)
+            .observe(this, Observer { workInfo: WorkInfo? ->
+                workInfo?.let {
+                    if (workInfo.state == WorkInfo.State.SUCCEEDED) {
+                        MyApplication.prefsUID.lastUID = null
+                    }
+                }
+            })
+    }
 
 }
+
 

@@ -25,7 +25,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         setViewPager()
         observe()
-        search()
+        initSearchView()
     }
 
     private fun setViewPager() {
@@ -38,28 +38,41 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun observe() {
+        vm.replaceFragment.observe(this, Observer {
+            if (it) {
+                //toast("눌렀당!" + vm.albumTagName.value)
+                supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.layout_container, PhotoFragment())
+                    commit()
+                }
+            }
+        })
+
         vm.back.observe(this, Observer {
             if (it) {
-                vm.setIsAlbumSelected(false)
+                vm.setReplaceFragment(false)
+                vm.setIsBtnSearchClicked(false)
             }
         })
     }
 
-    private fun search(){
+    private fun initSearchView() {
         btn_search.setOnClickListener {
             val edtText = edit_search.text.toString()
-            if(edtText != ""){
+            if (edtText != "") {
+                vm.setReplaceFragment(true)
+                vm.setIsBtnSearchClicked(true)
                 vm.setSearchTagName(edtText)
-                vm.setIsAlbumSelected(true)
-            }else {
+            } else {
                 toast("검색어를 입력하세요.")
             }
         }
     }
 
     override fun onBackPressed() {  // 뒤로가기 눌렀을 때 바로 앱 종료되는 것 막기
-        if (vm.isAlbumSelected.value!!) {
-            vm.setIsAlbumSelected(false)
+        if (vm.replaceFragment.value!!) {
+            vm.setReplaceFragment(false)
+            vm.setIsBtnSearchClicked(false)
         } else {
             super.onBackPressed()
         }

@@ -40,11 +40,16 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), PhotoClickListener {
             photoClicked(photo)
         }
 
-        if (mvm.isAlbumSelected.value == false) {
-            setItemList(photoAdapter, vm.itemList)
-        } else {
-            vm.setAlbumItemList(mvm.albumTagName.value!!)
-            setItemList(photoAdapter, vm.albumItemList)
+        when (mvm.replaceFragment.value) {
+            false -> setItemList(photoAdapter, vm.itemList)
+            else -> {
+                if (mvm.isBtnSearchClicked.value == true) {
+                    vm.setAlbumItemList(mvm.searchTagName.value!!)
+                } else {
+                    vm.setAlbumItemList(mvm.albumTagTitle.value!!)
+                }
+                setItemList(photoAdapter, vm.newItemList)
+            }
         }
 
         with(layout_recycler_view) {

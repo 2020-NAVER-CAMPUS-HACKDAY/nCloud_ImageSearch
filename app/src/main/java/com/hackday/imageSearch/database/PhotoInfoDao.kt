@@ -42,9 +42,6 @@ interface PhotoInfoDao {
     @Query("SELECT * FROM photoinfo WHERE tag3= :tag3")
     fun getPhotoByTag3(tag3: String): Single<List<PhotoInfo>>
 
-    @Query("SELECT * FROM photoinfo WHERE :tag in (tag1, tag2, tag3)")
-    fun getPhotoByTag(tag: String): DataSource.Factory<Int, PhotoInfo>
-
     @Query("SELECT COUNT(uri) from photoinfo WHERE uri= :uri")
     fun getUriCountbyUri(uri: String): Boolean
 }

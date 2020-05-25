@@ -23,7 +23,7 @@ class AlbumAdapter : PagedListAdapter<PhotoTag, AlbumAdapter.Holder>(DIFF_CALLBA
         private val image = itemView.findViewById<ImageView>(R.id.img_album_thumbnail)
         private val label = itemView.findViewById<TextView>(R.id.txt_album_label)
 
-        fun bind(photo: PhotoTag?, position: Int) {
+        fun bind(photo: PhotoTag?) {
 
             Glide.with(context)
                 .load(photo?.uri)
@@ -34,7 +34,7 @@ class AlbumAdapter : PagedListAdapter<PhotoTag, AlbumAdapter.Holder>(DIFF_CALLBA
             label.text = photo?.tag
 
             itemView.setOnClickListener {
-                item?.clickItem(position, photo?.tag)
+                item?.clickItem(photo?.tag)
             }
         }
 
@@ -48,19 +48,19 @@ class AlbumAdapter : PagedListAdapter<PhotoTag, AlbumAdapter.Holder>(DIFF_CALLBA
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val album: PhotoTag? = getItem(position)
-        holder.bind(album, position)
+        holder.bind(album)
     }
 
-    fun setOnItemClickListener(listener: (Int, String?) -> Unit) {
+    fun setOnItemClickListener(listener: (String?) -> Unit) {
         item = object : OnItemClickListener {
-            override fun clickItem(position: Int, label: String?) {
-                listener(position, label)
+            override fun clickItem(label: String?) {
+                listener(label)
             }
         }
     }
 
     interface OnItemClickListener {
-        fun clickItem(position: Int, label: String?)
+        fun clickItem(label: String?)
     }
 
     companion object {

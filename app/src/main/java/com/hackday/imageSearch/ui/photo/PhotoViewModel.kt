@@ -10,12 +10,12 @@ import com.hackday.imageSearch.repository.PhotoInfoRepository
 class PhotoViewModel(repository: PhotoInfoRepository) : ViewModel() {
 
     private val repo = repository
-    lateinit var albumItemList: LiveData<PagedList<PhotoInfo>>
+    lateinit var newItemList: LiveData<PagedList<PhotoInfo>>
 
     val itemList: LiveData<PagedList<PhotoInfo>> = repository.getAll().toLiveData(pageSize = 50)
 
     fun setAlbumItemList(tag: String) {
-        albumItemList = repo.getAllPhotoByTag(tag).toLiveData(pageSize = 50)
+        newItemList = repo.getAllPhotoByTag(tag).toLiveData(pageSize = 50)
     }
 
 }

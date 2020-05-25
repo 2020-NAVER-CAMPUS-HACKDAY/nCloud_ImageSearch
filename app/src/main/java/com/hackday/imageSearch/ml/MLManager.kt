@@ -9,7 +9,7 @@ class MLManager(context: Context) {
     val key = ""
     val prefs: SharedPreferences = context.getSharedPreferences(fileName, 0)
 
-    var getUrl: String?
+    var lastImageAddedDate: String?
         get() = prefs.getString(key, null)
         set(value) = prefs.edit().putString(key, value).apply()
 

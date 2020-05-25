@@ -172,7 +172,6 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
     }
 
     private fun reportProgress(current: Int, total: Int) {
-        Log.e("잉", current.toString() + " " + total.toString())
         val builder = NotificationCompat.Builder(applicationContext, "channelId")
             .setProgress(total, current, false)
             .setSmallIcon(androidx.work.R.drawable.notification_tile_bg)

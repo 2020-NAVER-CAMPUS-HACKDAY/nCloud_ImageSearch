@@ -1,6 +1,8 @@
 package com.hackday.imageSearch.ui.main
 
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.View
 import androidx.lifecycle.Observer
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseActivity
@@ -25,7 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         setViewPager()
         observe()
-        initSearchView()
+        initSearchListener()
     }
 
     private fun setViewPager() {
@@ -56,16 +58,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         })
     }
 
-    private fun initSearchView() {
+    private fun initSearchListener() {
         btn_search.setOnClickListener {
-            val edtText = edit_search.text.toString()
-            if (edtText != "") {
-                vm.setReplaceFragment(true)
-                vm.setIsBtnSearchClicked(true)
-                vm.setSearchTagName(edtText)
-            } else {
-                toast("검색어를 입력하세요.")
+            setSearchView()
+        }
+
+        edit_search.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                setSearchView()
+                return@OnKeyListener true
             }
+            false
+        })
+    }
+
+    private fun setSearchView(){
+        val edtText = edit_search.text.toString()
+        if (edtText != "") {
+            vm.setReplaceFragment(true)
+            vm.setIsBtnSearchClicked(true)
+            vm.setSearchTagName(edtText)
+        } else {
+            toast("검색어를 입력하세요.")
         }
     }
 

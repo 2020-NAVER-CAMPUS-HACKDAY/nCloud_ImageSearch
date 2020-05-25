@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="검색"
-            android:maxLines="1"
+            android:singleLine="true"
             app:layout_constraintBaseline_toBaselineOf="@id/btn_search"
             app:layout_constraintEnd_toStartOf="@id/btn_search"
             app:layout_constraintHorizontal_bias="0.05"

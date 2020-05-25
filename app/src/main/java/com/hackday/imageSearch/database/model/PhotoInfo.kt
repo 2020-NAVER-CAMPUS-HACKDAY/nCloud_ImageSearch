@@ -17,5 +17,7 @@ data class PhotoInfo(
     @ColumnInfo(name = "tag2")
     var tag2 : String?,
     @ColumnInfo(name = "tag3")
-    var tag3 : String?
+    var tag3 : String?,
+    @ColumnInfo(name = "mills")
+    var mills : Long
 )

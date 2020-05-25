@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat
 class MLLabelWorker(private val context: Context, private val workerParams: WorkerParameters) :
     Worker(context, workerParams) {
 
-    private var pathArrayList = ArrayList<Pair<String, String>>()
+    private var pathArrayList = ArrayList<Pair<String, Long>>()
 
     private val photoInofoRepository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
 
@@ -102,7 +102,6 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                         it.getLong(idColumnIndex)
                     ).toString()
                     val mills = it.getLong(dateColumnIndex)
-                    val date = generateDate(mills, "yyyy-MM-dd")
                     val dateAdded = it.getLong(dateAddedColumnIndex).toString()
                     if (MyApplication.prefsLabel.lastImageAddedDate == null || MyApplication.prefsLabel.lastImageAddedDate.toString() < dateAdded) {
                         MyApplication.prefsLabel.lastImageAddedDate = dateAdded
@@ -112,7 +111,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                         .photoInfoDao()
                         .getUriCountbyUri(uri)
                         .takeIf { count -> count == false }?.let {
-                            val uriAndDate = Pair(uri, date)
+                            val uriAndDate = Pair(uri, mills)
                             pathArrayList.add(
                                 uriAndDate
                             )
@@ -139,22 +138,25 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             /** blocking! */
             val labels = Tasks.await(processTask); //프로세스 이미지를
 
+            val date = generateDate(uriAndDate.second, "yyyy-MM-dd")
             when (labels.size) {
-                0 -> PhotoInfo(uriAndDate.second, uriAndDate.first, null, null, null)
-                1 -> PhotoInfo(uriAndDate.second, uriAndDate.first, labels[0].text, null, null)
+                0 -> PhotoInfo(date, uriAndDate.first, null, null, null, uriAndDate.second)
+                1 -> PhotoInfo(date, uriAndDate.first, labels[0].text, null, null, uriAndDate.second)
                 2 -> PhotoInfo(
-                    uriAndDate.second,
+                    date,
                     uriAndDate.first,
                     labels[0].text,
                     labels[1].text,
-                    null
+                    null,
+                    uriAndDate.second
                 )
                 else -> PhotoInfo(
-                    uriAndDate.second,
+                    date,
                     uriAndDate.first,
                     labels[0].text,
                     labels[1].text,
-                    labels[2].text
+                    labels[2].text,
+                    uriAndDate.second
                 )
             }.let {
                 photoInofoRepository.insertPhotoNonObserve(it)
@@ -176,7 +178,6 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
 
     private fun reportProgress(current: Int, total: Int) {
 
-        Log.e("진행상황", current.toString() + " " + total.toString())
         val builder = NotificationCompat.Builder(applicationContext, "channelId")
             .setProgress(total, current, false)
             .setSmallIcon(androidx.work.R.drawable.notification_tile_bg)

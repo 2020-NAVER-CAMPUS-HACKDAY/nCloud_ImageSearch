@@ -13,7 +13,6 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         prefsLabel = MLLabelManager(applicationContext)
-        prefsUID = MLWorkerManager(applicationContext)
         startKoin {
             androidContext(this@MyApplication)
             modules(appModule)
@@ -28,7 +27,6 @@ class MyApplication : Application() {
     companion object {
 
         lateinit var prefsLabel: MLLabelManager
-        lateinit var prefsUID: MLWorkerManager
         private var instance: MyApplication? = null
         fun applicationContext(): Context {
             return instance!!.applicationContext

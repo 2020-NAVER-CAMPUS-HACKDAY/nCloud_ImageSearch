@@ -47,20 +47,20 @@ class MLActivity : AppCompatActivity() {
 
     @ExperimentalStdlibApi
     private fun startLabelWork() {
-
         val workRequest = createWorkRequest()
-        if (isWorkerRunning())
+        if (!isWorkerRunning())
             startWorkRequest(workRequest)
     }
 
     private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>()
+        .addTag("initWork")
         .build()
 
     private fun startWorkRequest(workRequest: WorkRequest) = getWorkManager().enqueue(workRequest)
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
-    private fun isWorkerRunning() = getWorkManager().getWorkInfosByTag("workId").get()
+    private fun isWorkerRunning() = getWorkManager().getWorkInfosByTag("initWork").get()
         .indexOfFirst { !it.state.isFinished } >= 0
 
 }

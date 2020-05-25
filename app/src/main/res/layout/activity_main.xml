@@ -39,7 +39,6 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="20dp" />
 
-
         <LinearLayout
             android:id="@+id/layout_mainSearch"
             android:layout_width="0dp"
@@ -90,12 +89,14 @@
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/layout_viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:visibility="@{vm.replaceFragment? View.GONE : View.VISIBLE}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_mainSearch" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_mainSearch"
+            app:layout_constraintBottom_toTopOf="@id/layout_tab_layout"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/layout_tab_layout"

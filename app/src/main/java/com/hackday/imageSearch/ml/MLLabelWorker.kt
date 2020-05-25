@@ -25,8 +25,6 @@ import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.repository.PhotoInfoRepositoryInjector
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MLLabelWorker(private val context: Context, private val workerParams: WorkerParameters) :
@@ -91,7 +89,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             .query(
                 uri,
                 projection,
-                MyApplication.prefs.getUrl,
+                MyApplication.prefs.lastImageAddedDate,
                 null,
                 MediaStore.MediaColumns.DATE_ADDED + " desc"
             )
@@ -108,8 +106,8 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                     val mills = it.getLong(dateColumnIndex)
                     val date = generateDate(mills, "yyyy-MM-dd")
                     val dateAdded = it.getLong(dateAddedColumnIndex).toString()
-                    if (MyApplication.prefs.getUrl == null || MyApplication.prefs.getUrl.toString() < dateAdded) {
-                        MyApplication.prefs.getUrl = dateAdded
+                    if (MyApplication.prefs.lastImageAddedDate == null || MyApplication.prefs.lastImageAddedDate.toString() < dateAdded) {
+                        MyApplication.prefs.lastImageAddedDate = dateAdded
                     }
                     PhotoInfoDatabase
                         .getInstance()
@@ -174,6 +172,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
     }
 
     private fun reportProgress(current: Int, total: Int) {
+        Log.e("잉", current.toString() + " " + total.toString())
         val builder = NotificationCompat.Builder(applicationContext, "channelId")
             .setProgress(total, current, false)
             .setSmallIcon(androidx.work.R.drawable.notification_tile_bg)

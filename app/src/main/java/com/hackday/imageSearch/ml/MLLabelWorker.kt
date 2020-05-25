@@ -141,7 +141,14 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             val date = generateDate(uriAndDate.second, "yyyy-MM-dd")
             when (labels.size) {
                 0 -> PhotoInfo(date, uriAndDate.first, null, null, null, uriAndDate.second)
-                1 -> PhotoInfo(date, uriAndDate.first, labels[0].text, null, null, uriAndDate.second)
+                1 -> PhotoInfo(
+                    date,
+                    uriAndDate.first,
+                    labels[0].text,
+                    null,
+                    null,
+                    uriAndDate.second
+                )
                 2 -> PhotoInfo(
                     date,
                     uriAndDate.first,

@@ -5,7 +5,6 @@ import android.content.Context
 import com.hackday.imageSearch.di.appModule
 import com.hackday.imageSearch.di.viewModelModule
 import com.hackday.imageSearch.ml.MLLabelManager
-import com.hackday.imageSearch.ml.MLWorkerManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

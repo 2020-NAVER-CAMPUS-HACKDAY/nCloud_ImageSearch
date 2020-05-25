@@ -4,34 +4,21 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
-import com.hackday.imageSearch.MyApplication
-import com.hackday.imageSearch.R
-import com.hackday.imageSearch.databinding.ActivitySplashBinding
 import com.hackday.imageSearch.ui.main.MainActivity
-import java.util.*
 
 
 class MLActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MLViewModel
 
     @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val binding: ActivitySplashBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_splash)
-
         getPermission()
-        //observeWorkEnded()
     }
 
     @ExperimentalStdlibApi
@@ -62,12 +49,8 @@ class MLActivity : AppCompatActivity() {
     private fun startLabelWork() {
 
         val workRequest = createWorkRequest()
-        if (MyApplication.prefsUID.lastUID == null) {
-            MyApplication.prefsUID.lastUID = workRequest.id.toString()
+        if (isWorkerRunning())
             startWorkRequest(workRequest)
-        }
-        workerEnded(UUID.fromString(MyApplication.prefsUID.lastUID))
-
     }
 
     private fun createWorkRequest() = OneTimeWorkRequestBuilder<MLLabelWorker>()
@@ -77,17 +60,8 @@ class MLActivity : AppCompatActivity() {
 
     private fun getWorkManager() = WorkManager.getInstance(this)
 
-    private fun workerEnded(workId: UUID) {
-        getWorkManager()
-            .getWorkInfoByIdLiveData(workId)
-            .observe(this, Observer { workInfo: WorkInfo? ->
-                workInfo?.let {
-                    if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                        MyApplication.prefsUID.lastUID = null
-                    }
-                }
-            })
-    }
+    private fun isWorkerRunning() = getWorkManager().getWorkInfosByTag("workId").get()
+        .indexOfFirst { !it.state.isFinished } >= 0
 
 }
 

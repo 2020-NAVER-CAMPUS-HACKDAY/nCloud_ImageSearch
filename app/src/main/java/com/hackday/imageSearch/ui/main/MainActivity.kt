@@ -1,8 +1,10 @@
 package com.hackday.imageSearch.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.Observer
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseActivity
@@ -54,6 +56,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (it) {
                 vm.setReplaceFragment(false)
                 vm.setIsBtnSearchClicked(false)
+                CloseKeyboard()
+                edit_search.setText("")
+                edit_search.clearFocus()
             }
         })
     }
@@ -80,6 +85,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             vm.setSearchTagName(edtText)
         } else {
             toast("검색어를 입력하세요.")
+        }
+    }
+
+    fun CloseKeyboard(){
+        var view = this.currentFocus
+
+        if(view != null){
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 

@@ -172,6 +172,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
     }
 
     private fun reportProgress(current: Int, total: Int) {
+
         val builder = NotificationCompat.Builder(applicationContext, "channelId")
             .setProgress(total, current, false)
             .setSmallIcon(androidx.work.R.drawable.notification_tile_bg)
@@ -181,6 +182,11 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                 NotificationManager::class.java
             ) as NotificationManager
         service.notify(1, builder.build());
+
+        if(current==total)
+        {
+            service.cancelAll()
+        }
     }
 
     private fun generateDate(mills: Long, dateformat: String): String {

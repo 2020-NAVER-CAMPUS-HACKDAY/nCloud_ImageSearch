@@ -28,8 +28,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BrowserFragment : Fragment {
 
-    val pvm: PhotoInfoViewModel by viewModel()
-    private var position = 0
+    private var curposition = 0
     private var animeContx: Context? = null
     private var imagePager: ViewPager? = null
     private var pagingImages: ImagesPagerAdapter? = null
@@ -45,7 +44,7 @@ class BrowserFragment : Fragment {
         anim: Context?
     ) {
         this.allImages = allImages
-        position = pos
+        curposition = pos
         animeContx = anim
     }
 
@@ -76,14 +75,8 @@ class BrowserFragment : Fragment {
         pagingImages = ImagesPagerAdapter()
         imagePager!!.adapter = pagingImages
         imagePager!!.offscreenPageLimit = 3
-        imagePager!!.currentItem =
-            position //displaying the image at the current position passed by the ImageDisplay Activity
+        imagePager!!.currentItem = curposition
 
-        /**
-         * this listener controls the visibility of the recyclerView
-         * indication and it current position in respect to the image ViewPager
-         */
-        previousSelected = position
         imagePager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
@@ -93,13 +86,7 @@ class BrowserFragment : Fragment {
             }
 
             override fun onPageSelected(position: Int) {
-                if (previousSelected != -1) {
-                    previousSelected = position
-                    // photoInfo
-                } else {
-                    previousSelected = position
-                    // photoInfo
-                }
+                curposition = position
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
@@ -124,7 +111,6 @@ class BrowserFragment : Fragment {
             image = view.findViewById(R.id.pager_image)
             ViewCompat.setTransitionName(image, position.toString() + "picture")
             val pic: PhotoInfo = allImages[position]!!
-            dlg.start(pic)
 
             Glide.with(animeContx!!)
                 .load(pic.uri)
@@ -136,21 +122,21 @@ class BrowserFragment : Fragment {
             }
 
             btn_detail.setOnClickListener {
-                dialogDetail(pic)
+                dialogDetail()
             }
 
             (containerCollection as ViewPager).addView(view)
             return view
         }
 
-        fun finishFrag() {
+        private fun finishFrag() {
             val fragmentManager = activity!!.supportFragmentManager
             fragmentManager.beginTransaction().remove(this@BrowserFragment).commit()
             fragmentManager.popBackStack()
         }
 
-        fun dialogDetail(pic: PhotoInfo) {
-            dlg.show()
+        private fun dialogDetail() {
+            dlg.start(allImages[curposition]!!)
         }
 
         override fun destroyItem(

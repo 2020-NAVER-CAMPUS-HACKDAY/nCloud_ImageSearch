@@ -56,7 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (it) {
                 vm.setReplaceFragment(false)
                 vm.setIsBtnSearchClicked(false)
-                CloseKeyboard()
+                closeKeyboard()
                 edit_search.setText("")
                 edit_search.clearFocus()
             }
@@ -77,7 +77,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         })
     }
 
-    private fun setSearchView(){
+    private fun setSearchView() {
         val edtText = edit_search.text.toString()
         if (edtText != "") {
             vm.setReplaceFragment(true)
@@ -88,11 +88,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    fun CloseKeyboard(){
+    fun closeKeyboard() {
         var view = this.currentFocus
 
-        if(view != null){
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (view != null) {
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }

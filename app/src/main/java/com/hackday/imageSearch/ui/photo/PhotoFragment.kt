@@ -1,11 +1,9 @@
 package com.hackday.imageSearch.ui.photo
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -20,7 +18,6 @@ import com.hackday.imageSearch.ui.main.MainViewModel
 import com.hackday.imageSearch.ui.photo.adapter.PhotoAdapter
 import com.hackday.imageSearch.ui.photo.adapter.PhotoItemDecorator
 import com.hackday.imageSearch.ui.viewer.BrowserFragment
-import com.hackday.imageSearch.ui.viewer.ViewerActivity
 import kotlinx.android.synthetic.main.fragment_album.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

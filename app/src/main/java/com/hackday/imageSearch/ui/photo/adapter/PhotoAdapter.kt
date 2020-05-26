@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,26 +15,26 @@ import com.bumptech.glide.request.RequestOptions
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.model.PhotoInfo
 
-class PhotoAdapter(val photoClick: (PhotoInfo?) -> Unit) :
+class PhotoAdapter(val photoClick: (ImageView, Int, PagedList<PhotoInfo>?) -> Unit) :
     PagedListAdapter<PhotoInfo, PhotoAdapter.Holder>(DIFF_CALLBACK) {
     lateinit var context: Context
 
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val date = itemView.findViewById<TextView>(R.id.txt_date)
-        private val image = itemView.findViewById<ImageView>(R.id.img_photo)
+        private val imageview = itemView.findViewById<ImageView>(R.id.img_photo)
 
-        fun bind(photo: PhotoInfo?) {
+        fun bind(photo: PhotoInfo?, pos: Int) {
 
             Glide.with(context)
                 .load(photo?.uri)
                 .error(R.drawable.ic_launcher_background)
                 .apply(RequestOptions().fitCenter().override(IMAGE_SIZE, IMAGE_SIZE))
-                .into(image)
+                .into(imageview)
 
             date.text = photo?.date
 
             itemView.setOnClickListener {
-                photoClick(photo)
+                photoClick(imageview, pos, currentList)
             }
         }
 
@@ -47,7 +48,7 @@ class PhotoAdapter(val photoClick: (PhotoInfo?) -> Unit) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val photo: PhotoInfo? = getItem(position)
-        holder.bind(photo)
+        holder.bind(photo, position)
     }
 
     companion object {

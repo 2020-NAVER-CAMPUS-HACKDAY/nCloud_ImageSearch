@@ -59,11 +59,11 @@ class ViewerActivity : AppCompatActivity() {
         if (intent != null && intent.hasExtra(EXTRA_PHOTO_URI)) {
             uri = intent.getStringExtra(EXTRA_PHOTO_URI)!!
 
-            Glide.with(this)
-                .load(uri)
-                .error(R.drawable.ic_launcher_background)
-                .apply(RequestOptions().fitCenter())
-                .into(img_photo_detail)
+//            Glide.with(this)
+//                .load(uri)
+//                .error(R.drawable.ic_launcher_background)
+//                .apply(RequestOptions().fitCenter())
+//                .into(img_photo_detail)
 
             pvm.getPhotoByUri(uri).observe(this, Observer {
                 dlg.start(it)

@@ -33,12 +33,13 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
 
     private val photoInofoRepository = PhotoInfoRepositoryInjector.getPhotoRepositoryImpl()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
         try {
-            getNoneLabeledList()
-            setForegroundAsync(createForegroundInfo("labeling...."))
-            addLabelToImageIfNeeded()
+            if (getNoneLabeledList() > 0) {
+                setForegroundAsync(createForegroundInfo("labeling...."))
+                addLabelToImageIfNeeded()
+            }
+
         } catch (e: Exception) {
             e.printStackTrace()
             return Result.failure()
@@ -73,7 +74,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
         return channelId
     }
 
-    private fun getNoneLabeledList() {
+    private fun getNoneLabeledList(): Int {
         val idColumnName = MediaStore.Images.ImageColumns._ID
         val pathColumnName = MediaStore.Images.ImageColumns.DATA
         val dateColumnName = MediaStore.Images.ImageColumns.DATE_TAKEN
@@ -118,6 +119,7 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
                         }
                 }
             }
+        return pathArrayList.size
     }
 
     private fun addLabelToImageIfNeeded() {
@@ -141,7 +143,14 @@ class MLLabelWorker(private val context: Context, private val workerParams: Work
             val date = generateDate(uriAndDate.second, "yyyy-MM-dd")
             when (labels.size) {
                 0 -> PhotoInfo(date, uriAndDate.first, null, null, null, uriAndDate.second)
-                1 -> PhotoInfo(date, uriAndDate.first, labels[0].text, null, null, uriAndDate.second)
+                1 -> PhotoInfo(
+                    date,
+                    uriAndDate.first,
+                    labels[0].text,
+                    null,
+                    null,
+                    uriAndDate.second
+                )
                 2 -> PhotoInfo(
                     date,
                     uriAndDate.first,

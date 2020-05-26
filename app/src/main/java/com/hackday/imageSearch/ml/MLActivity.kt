@@ -15,13 +15,11 @@ import com.hackday.imageSearch.ui.main.MainActivity
 class MLActivity : AppCompatActivity() {
 
 
-    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getPermission()
     }
 
-    @ExperimentalStdlibApi
     private fun getPermission() {
         var permissionListener: PermissionListener = object : PermissionListener {
 
@@ -45,7 +43,6 @@ class MLActivity : AppCompatActivity() {
             .check()
     }
 
-    @ExperimentalStdlibApi
     private fun startLabelWork() {
         val workRequest = createWorkRequest()
         if (!isWorkerRunning())

@@ -44,6 +44,8 @@
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron_left_white_35dp"
+            android:background="@android:color/transparent"
             app:layout_constraintLeft_toRightOf="@id/guide_start"
             app:layout_constraintTop_toTopOf="@id/guide_top" />
 
@@ -51,6 +53,8 @@
             android:id="@+id/btn_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_more_horiz_white_35dp"
+            android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="@id/guide_end"
             app:layout_constraintTop_toTopOf="@id/guide_top" />
 

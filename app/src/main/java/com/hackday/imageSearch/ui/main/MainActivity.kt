@@ -56,8 +56,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (it) {
                 vm.setReplaceFragment(false)
                 vm.setIsBtnSearchClicked(false)
+                vm.setEditSearchEmpty()
                 closeKeyboard()
-                edit_search.setText("")
                 edit_search.clearFocus()
             }
         })
@@ -78,18 +78,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun setSearchView() {
-        val edtText = edit_search.text.toString()
+        val edtText = vm.editSearch.get()
         if (edtText != "") {
             vm.setReplaceFragment(true)
             vm.setIsBtnSearchClicked(true)
-            vm.setSearchTagName(edtText)
+            vm.setSearchTagName(edtText!!)
         } else {
             toast("검색어를 입력하세요.")
         }
     }
 
     fun closeKeyboard() {
-        var view = this.currentFocus
+        val view = this.currentFocus
 
         if (view != null) {
             val inputMethodManager =

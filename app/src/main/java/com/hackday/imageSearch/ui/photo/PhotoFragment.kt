@@ -72,25 +72,25 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), PhotoClickListener {
         })
     }
 
-    override fun photoClicked(holer_image: ImageView, position: Int, clist: PagedList<PhotoInfo>?) {
+    override fun photoClicked(image: ImageView, position: Int, clist: PagedList<PhotoInfo>?) {
         val browser = BrowserFragment().newInstance(clist!!, position, context)
 
         closeKeyboard()
 
-        browser!!.enterTransition = Fade()
+        browser.enterTransition = Fade()
         browser.exitTransition = Fade()
 
         requireActivity().supportFragmentManager
             .beginTransaction()
-            .addSharedElement(holer_image, "transitionPhotofrag")
-            .add(R.id.layout_top, browser!!)
+            .addSharedElement(image, "transitionPhotofrag")
+            .add(R.id.layout_top, browser)
             .addToBackStack(null)
             .commit()
     }
 
-    fun closeKeyboard() {
+    private fun closeKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view?.getWindowToken(), 0)
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
 }

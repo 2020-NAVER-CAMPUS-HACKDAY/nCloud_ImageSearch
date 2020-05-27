@@ -32,7 +32,6 @@ class BrowserFragment : Fragment {
     private var animeContx: Context? = null
     private var imagePager: ViewPager? = null
     private var pagingImages: ImagesPagerAdapter? = null
-    private var previousSelected = -1
     private lateinit var allImages: PagedList<PhotoInfo>
     private lateinit var dlg: DetailDialog
 
@@ -52,7 +51,7 @@ class BrowserFragment : Fragment {
         allImages: PagedList<PhotoInfo>,
         pos: Int,
         anim: Context?
-    ): BrowserFragment? {
+    ): BrowserFragment {
         return BrowserFragment(allImages, pos, anim)
     }
 
@@ -70,9 +69,14 @@ class BrowserFragment : Fragment {
         super.onViewCreated(view, savedInstanceState)
 
         dlg = DetailDialog(animeContx!!)
+        initImagePager(view)
+        btnClickListener()
 
+    }
+
+    private fun initImagePager(view: View) {
         imagePager = view.findViewById(R.id.viewPager)
-        pagingImages = ImagesPagerAdapter()
+        pagingImages = ImagesPagerAdapter(requireContext(), allImages)
         imagePager!!.adapter = pagingImages
         imagePager!!.offscreenPageLimit = 3
         imagePager!!.currentItem = curposition
@@ -91,64 +95,25 @@ class BrowserFragment : Fragment {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-
     }
 
-    inner class ImagesPagerAdapter() : PagerAdapter() {
-        private lateinit var image: ImageView
-
-        override fun getCount(): Int {
-            return allImages.size
+    private fun btnClickListener() {
+        btn_back.setOnClickListener {
+            finishFrag()
         }
 
-        override fun instantiateItem(
-            containerCollection: ViewGroup,
-            position: Int
-        ): Any {
-            val layoutinflater = containerCollection.context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val view: View = layoutinflater.inflate(R.layout.browser_viewer_pager, null)
-            image = view.findViewById(R.id.pager_image)
-            ViewCompat.setTransitionName(image, position.toString() + "picture")
-            val pic: PhotoInfo = allImages[position]!!
-
-            Glide.with(animeContx!!)
-                .load(pic.uri)
-                .apply(RequestOptions().fitCenter())
-                .into(image)
-
-            btn_back.setOnClickListener {
-                finishFrag()
-            }
-
-            btn_detail.setOnClickListener {
-                dialogDetail()
-            }
-
-            (containerCollection as ViewPager).addView(view)
-            return view
+        btn_detail.setOnClickListener {
+            dialogDetail()
         }
+    }
 
-        private fun finishFrag() {
-            val fragmentManager = activity!!.supportFragmentManager
-            fragmentManager.beginTransaction().remove(this@BrowserFragment).commit()
-            fragmentManager.popBackStack()
-        }
+    private fun finishFrag() {
+        val fragmentManager = requireActivity().supportFragmentManager
+        fragmentManager.beginTransaction().remove(this@BrowserFragment).commit()
+        fragmentManager.popBackStack()
+    }
 
-        private fun dialogDetail() {
-            dlg.start(allImages[curposition]!!)
-        }
-
-        override fun destroyItem(
-            containerCollection: ViewGroup,
-            position: Int,
-            view: Any
-        ) {
-            (containerCollection as ViewPager).removeView(view as View)
-        }
-
-        override fun isViewFromObject(view: View, `object`: Any): Boolean {
-            return view === `object` as View
-        }
+    private fun dialogDetail() {
+        dlg.start(allImages[curposition]!!)
     }
 }

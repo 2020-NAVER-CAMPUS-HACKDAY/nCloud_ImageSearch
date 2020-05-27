@@ -1,5 +1,6 @@
 package com.hackday.imageSearch.ui.main
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,6 +22,9 @@ class MainViewModel : ViewModel() {
     private val _back = MutableLiveData<Boolean>(false)
     val back: LiveData<Boolean> get() = _back
 
+    private val _editSearch = ObservableField<String>("")
+    val editSearch: ObservableField<String> get() = _editSearch
+
     fun setReplaceFragment(flag: Boolean) {
         _replaceFragment.value = flag
     }
@@ -39,5 +43,9 @@ class MainViewModel : ViewModel() {
 
     fun setBack() {
         _back.value = true
+    }
+
+    fun setEditSearchEmpty(){
+        _editSearch.set("")
     }
 }

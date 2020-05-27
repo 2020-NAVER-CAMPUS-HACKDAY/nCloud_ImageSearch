@@ -47,6 +47,8 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:background="@drawable/round_border_rect"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintStart_toStartOf="@id/guide_start"
             app:layout_constraintEnd_toStartOf="@id/guide_end"
             app:layout_constraintTop_toBottomOf="@id/guide_top">
@@ -66,8 +68,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="검색"
+                android:text="@={vm.editSearch}"
                 android:singleLine="true"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent" />
 
             <ImageButton
                 android:id="@+id/btn_search"

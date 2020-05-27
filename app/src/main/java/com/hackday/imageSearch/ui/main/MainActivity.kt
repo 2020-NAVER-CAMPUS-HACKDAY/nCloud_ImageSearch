@@ -79,10 +79,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun setSearchView() {
         val edtText = vm.editSearch.get()
-        if (edtText != "") {
+        if (!edtText.isNullOrBlank()) {
             vm.setReplaceFragment(true)
             vm.setIsBtnSearchClicked(true)
-            vm.setSearchTagName(edtText!!)
+            vm.setSearchTagName(edtText)
         } else {
             toast("검색어를 입력하세요.")
         }

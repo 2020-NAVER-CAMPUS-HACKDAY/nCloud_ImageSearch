@@ -88,7 +88,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    fun closeKeyboard() {
+    private fun closeKeyboard() {
         val view = this.currentFocus
 
         if (view != null) {

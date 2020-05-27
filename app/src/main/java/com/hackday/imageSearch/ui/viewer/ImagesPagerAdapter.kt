@@ -15,8 +15,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.model.PhotoInfo
 
-class ImagesPagerAdapter(val context: Context, private val allImages: PagedList<PhotoInfo>) : PagerAdapter() {
-    private lateinit var image: ImageView
+class ImagesPagerAdapter(val context: Context, private val allImages: PagedList<PhotoInfo>) :
+    PagerAdapter() {
 
     override fun getCount(): Int {
         return allImages.size
@@ -30,13 +30,14 @@ class ImagesPagerAdapter(val context: Context, private val allImages: PagedList<
         val layoutinflater = containerCollection.context
             .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view: View = layoutinflater.inflate(R.layout.browser_viewer_pager, null)
-        image = view.findViewById(R.id.pager_image)
+        val image = view.findViewById<ImageView>(R.id.pager_image)
         ViewCompat.setTransitionName(image, position.toString() + "picture")
-        val pic: PhotoInfo = allImages[position]!!
+        val pic: PhotoInfo? = allImages[position]
 
         Glide.with(context)
-            .load(pic.uri)
+            .load(pic?.uri)
             .apply(RequestOptions().fitCenter())
+            .error(R.drawable.ic_launcher_foreground)
             .into(image)
 
         (containerCollection as ViewPager).addView(view)

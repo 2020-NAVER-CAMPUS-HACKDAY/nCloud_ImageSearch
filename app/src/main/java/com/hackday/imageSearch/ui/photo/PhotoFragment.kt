@@ -73,19 +73,21 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), PhotoClickListener {
     }
 
     override fun photoClicked(image: ImageView, position: Int, clist: PagedList<PhotoInfo>?) {
-        val browser = BrowserFragment().newInstance(clist!!, position, context)
+        if (clist?.isNotEmpty() == true && context != null) {
+            val browser = BrowserFragment().newInstance(clist, position, requireContext())
 
-        closeKeyboard()
+            closeKeyboard()
 
-        browser.enterTransition = Fade()
-        browser.exitTransition = Fade()
+            browser.enterTransition = Fade()
+            browser.exitTransition = Fade()
 
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .addSharedElement(image, "transitionPhotofrag")
-            .add(R.id.layout_top, browser)
-            .addToBackStack(null)
-            .commit()
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .addSharedElement(image, "transitionPhotofrag")
+                .add(R.id.layout_top, browser)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun closeKeyboard() {

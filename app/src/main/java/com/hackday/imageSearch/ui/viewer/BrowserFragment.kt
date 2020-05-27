@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch.model.PhotoInfo
+import com.hackday.imageSearch.ui.photo.PhotoViewModel
 import com.hackday.imageSearch.ui.photoinfo.PhotoInfoViewModel
 import kotlinx.android.synthetic.main.activity_viewer.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,18 +31,18 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class BrowserFragment : Fragment {
 
     private var curposition = 0
-    private var animeContx: Context? = null
     private var imagePager: ViewPager? = null
     private var pagingImages: ImagesPagerAdapter? = null
     private lateinit var allImages: PagedList<PhotoInfo>
     private lateinit var dlg: DetailDialog
+    private lateinit var animeContx: Context
 
     constructor()
 
     constructor(
         allImages: PagedList<PhotoInfo>,
         pos: Int,
-        anim: Context?
+        anim: Context
     ) {
         this.allImages = allImages
         curposition = pos
@@ -50,7 +52,7 @@ class BrowserFragment : Fragment {
     fun newInstance(
         allImages: PagedList<PhotoInfo>,
         pos: Int,
-        anim: Context?
+        anim: Context
     ): BrowserFragment {
         return BrowserFragment(allImages, pos, anim)
     }
@@ -68,10 +70,10 @@ class BrowserFragment : Fragment {
     override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dlg = DetailDialog(animeContx!!)
+        dlg = DetailDialog(animeContx)
         initImagePager(view)
+        initImagePagerChangeListener()
         btnClickListener()
-
     }
 
     private fun initImagePager(view: View) {
@@ -80,7 +82,9 @@ class BrowserFragment : Fragment {
         imagePager!!.adapter = pagingImages
         imagePager!!.offscreenPageLimit = 3
         imagePager!!.currentItem = curposition
+    }
 
+    private fun initImagePagerChangeListener() {
         imagePager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
@@ -114,6 +118,10 @@ class BrowserFragment : Fragment {
     }
 
     private fun dialogDetail() {
-        dlg.start(allImages[curposition]!!)
+        if (allImages[curposition] != null) {
+            dlg.start(allImages[curposition]!!)
+        } else {
+            Toast.makeText(animeContx, "사진 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 }

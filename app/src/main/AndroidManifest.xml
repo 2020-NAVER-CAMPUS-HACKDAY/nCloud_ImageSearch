@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hackday.imageSearch">
 
-    <uses-permission android:name="android.permission.CAMERA"/><!-- 카메라 권한 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/><!-- 저장소 쓰기 권한 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/><!-- 저장소 읽기 권한 -->
+    <uses-permission android:name="android.permission.CAMERA" /><!-- 카메라 권한 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!-- 저장소 쓰기 권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /><!-- 저장소 읽기 권한 -->
 
     <application
         android:name=".MyApplication"
@@ -14,13 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.viewer.ViewerActivity">
-
-        </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:windowSoftInputMode="stateHidden">
-        </activity>
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".ml.MLActivity"

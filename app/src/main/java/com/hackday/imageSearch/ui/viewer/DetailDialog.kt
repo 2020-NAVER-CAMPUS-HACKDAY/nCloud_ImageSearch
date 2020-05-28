@@ -27,5 +27,7 @@ class DetailDialog(context: Context) : Dialog(context) {
         btnOK.setOnClickListener {
             this.dismiss()
         }
+
+        show()
     }
 }

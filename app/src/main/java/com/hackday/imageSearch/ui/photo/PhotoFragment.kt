@@ -1,12 +1,15 @@
 package com.hackday.imageSearch.ui.photo
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.transition.Fade
 import com.hackday.imageSearch.R
 import com.hackday.imageSearch._base.BaseFragment
 import com.hackday.imageSearch.databinding.FragmentPhotoBinding
@@ -14,7 +17,7 @@ import com.hackday.imageSearch.model.PhotoInfo
 import com.hackday.imageSearch.ui.main.MainViewModel
 import com.hackday.imageSearch.ui.photo.adapter.PhotoAdapter
 import com.hackday.imageSearch.ui.photo.adapter.PhotoItemDecorator
-import com.hackday.imageSearch.ui.viewer.ViewerActivity
+import com.hackday.imageSearch.ui.viewer.BrowserFragment
 import kotlinx.android.synthetic.main.fragment_album.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -36,8 +39,8 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), PhotoClickListener {
     private fun setRecyclerView() {
 
         val recyclerManager = GridLayoutManager(context, 4)
-        val photoAdapter = PhotoAdapter { photo ->
-            photoClicked(photo)
+        val photoAdapter = PhotoAdapter { img, pos, clist ->
+            photoClicked(img, pos, clist)
         }
 
         when (mvm.replaceFragment.value) {
@@ -69,10 +72,27 @@ class PhotoFragment : BaseFragment<FragmentPhotoBinding>(), PhotoClickListener {
         })
     }
 
-    override fun photoClicked(photo: PhotoInfo?) {
-        val intent = Intent(context, ViewerActivity::class.java)
-        intent.putExtra(ViewerActivity.EXTRA_PHOTO_URI, photo?.uri)
-        startActivity(intent)
+    override fun photoClicked(image: ImageView, position: Int, clist: PagedList<PhotoInfo>?) {
+        if (clist?.isNotEmpty() == true && context != null) {
+            val browser = BrowserFragment().newInstance(clist, position, requireContext())
+
+            closeKeyboard()
+
+            browser.enterTransition = Fade()
+            browser.exitTransition = Fade()
+
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .addSharedElement(image, "transitionPhotofrag")
+                .add(R.id.layout_top, browser)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
+    private fun closeKeyboard() {
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
 }

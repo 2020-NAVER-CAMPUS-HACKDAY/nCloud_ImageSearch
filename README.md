@@ -1,5 +1,10 @@
 # nCloud_ImageSearch
 
+
+
+![동작화면](./nCloud_ImageSearch.gif)
+
+
 ### 프로젝트 주제 설명
 
 - ML Kit을 사용한 로컬 이미지 라벨링 및 검색 기능 구현

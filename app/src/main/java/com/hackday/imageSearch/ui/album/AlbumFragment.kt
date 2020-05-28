@@ -1,6 +1,7 @@
 package com.hackday.imageSearch.ui.album
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,8 +23,8 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
 
     private val mvm by activityViewModels<MainViewModel>()
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
     }
 
@@ -39,8 +40,10 @@ class AlbumFragment : BaseFragment<FragmentAlbumBinding>() {
         with(layout_recycler_view) {
             adapter = albumAdapter.apply {
                 setOnItemClickListener { label ->
-                    mvm.setAlbumTagTitle(label)
-                    mvm.setReplaceFragment(true)
+                    label?.let {
+                        mvm.setAlbumTagTitle(label)
+                        mvm.setReplaceFragment(true)
+                    }
                 }
 
             }

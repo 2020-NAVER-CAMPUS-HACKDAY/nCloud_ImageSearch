@@ -29,7 +29,7 @@ class MainViewModel : ViewModel() {
         _replaceFragment.value = flag
     }
 
-    fun setAlbumTagTitle(label: String?) {
+    fun setAlbumTagTitle(label: String) {
         _albumTagTitle.value = label
     }
 

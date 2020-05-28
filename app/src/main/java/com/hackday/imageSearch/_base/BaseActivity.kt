@@ -4,6 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -32,8 +35,16 @@ abstract class BaseActivity<T: ViewDataBinding> : AppCompatActivity() {
         startActivity(Intent(applicationContext, I::class.java))
     }
 
-    inline fun<reified I : Activity> startActivityForResult(requestCode: Int) {
-        startActivityForResult(Intent(applicationContext, I::class.java), requestCode)
+    inline fun <reified I : Activity> launch(resultLauncher: ActivityResultLauncher<Intent>) {
+        resultLauncher.launch(Intent(applicationContext, I::class.java))
+    }
+
+    fun registerForActivityResult(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->
+            if (result?.resultCode == Activity.RESULT_OK) {
+                toast("성공")
+            }
+        }
     }
 
     fun toast(content: String) {

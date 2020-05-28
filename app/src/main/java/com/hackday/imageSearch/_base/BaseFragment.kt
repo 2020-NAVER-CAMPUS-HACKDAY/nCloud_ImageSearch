@@ -32,13 +32,10 @@ abstract class BaseFragment<T: ViewDataBinding> : Fragment() {
         this.inflater = inflater
         this.container = container
 
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         setupBinding()
         binding.lifecycleOwner = this
+
+        return binding.root
     }
 
     fun toast(content: String) {
